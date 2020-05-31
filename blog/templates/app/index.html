@@ -1,0 +1,22 @@
+{% extends "app/layout.html" %}
+{% load static %}
+{% block content %}
+
+<div style="margin: 10px 0px; background-color: whitesmoke; padding: 32px; margin: 0;">
+    <div style="float:left; margin-right: 20px;">
+        <h1 style="margin-bottom:30px;">Explore everywhere with us </h1>
+        <p style="margin-bottom:20px;">Join us, Nathan and Molly, as we travel the world. <b>{{ story_count }} destinations explored, and counting!</b></p>
+        <a class="btn btn-primary" href="/stories">Click here to read our recent stories</a>
+        <a class="btn btn-default" href="/map">Travel Map</a>
+        <a class="btn btn-default" href="/storyfinder">Story Finder</a>
+        <button class="btn btn-default " onclick="email_sub()">Subscribe to our email list</button>
+    </div>
+    <div style="float:left;">
+        <img style="width:170px; margin-top:30px;" src="{% static 'app/images/wbe.svg' %}" alt="Passport Stamp"/>
+    </div>
+    <br style="clear:both;"/>
+</div>
+
+<img style="width:100%;" src="http://i.imgur.com/X2Bnl2x.png" alt="Polaroids and beer"/>
+
+{% endblock %}

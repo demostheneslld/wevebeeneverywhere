@@ -1,0 +1,155 @@
+﻿html {
+    background-color: white;
+}
+
+body {
+    padding-top: 50px;
+    padding-bottom: 20px;
+    font-family: 'Open Sans Condensed', sans-serif;
+    font-weight: 300;
+    font-size: 16px;
+    color: black;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Amatic SC', cursive !important;
+    font-weight: bold;
+    font-size: 20px;
+    color: #444;
+}
+
+h1 { font-size: 3.6em; }
+h2 { font-size: 3em; }
+h3 { font-size: 2.5em; }
+h4 { font-size: 2em; }
+
+/**/
+.navbar-fixed-top {
+    background-color: white;
+}
+
+.navbar-nav > li > a, .navbar-brand {
+    color: black !important;
+}
+
+.navbar-brand{
+    padding-top: 15px;
+    padding-bottom: 5px;
+    padding-left: 15px;
+    max-height: 55px;
+}
+
+
+.icon-bar {
+    border-bottom: 1px solid gainsboro;
+    width: 100% !important;
+}
+/* Set padding to keep content from hitting the edges */
+.body-content {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+.btn {
+    margin-right: 3px;
+    margin-left: 0px;
+    margin-top: 0px;
+    margin-bottom: 5px;
+} 
+
+.btn-cheered {
+    background-color: red;
+    color: white;
+}
+
+table.custom td {
+    padding-right: 15px;
+    padding-left: 5px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    border: 1px dotted grey;
+}
+
+table.custom th {
+    background-color: #bfbfbf;
+    padding: 10px;
+    border: 1px dotted grey
+}
+tr:nth-child(even) {
+    background-color: #f5f5f5;
+}
+
+tr:nth-child(odd) {
+    background-color: white;
+}
+table.custom td:hover {
+    background-color: lightcyan;
+}
+
+.form-vertical {
+    width: 450px;
+    margin:auto;
+}
+
+.form-label {
+    float:left;
+}
+
+.form-field {
+    float:right;
+}
+
+/* Set width on the form input elements since they're 100% wide by default */
+input,
+select,
+textarea {
+    max-width: 280px;
+}
+
+/* styles for validation helpers */
+.field-validation-error {
+    color: #b94a48;
+}
+
+.field-validation-valid {
+    display: none;
+}
+
+input.input-validation-error {
+    border: 1px solid #b94a48;
+}
+
+input[type="checkbox"].input-validation-error {
+    border: 0 none;
+}
+
+.validation-summary-errors {
+    color: #b94a48;
+}
+
+.validation-summary-valid {
+    display: none;
+}
+
+@media (max-width: 768px) {
+    .container {
+        width: 100%;
+    }
+
+    .body-content {
+        padding: 1px;
+    }
+
+    .form-vertical {
+        width: 100%;
+    }
+
+    .form-field {
+        clear:left;
+        float: left;
+    }
+
+    .navbar-fixed-top {
+        height: auto;
+    }
+}

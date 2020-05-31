@@ -1,0 +1,68 @@
+{% extends "app/layout.html" %}
+
+{% block content %}
+    <style>
+        #pagecontent {
+            min-width: 100%;
+            padding: 0px;
+        }
+    </style>
+    <div id="map" style="position:fixed; top: 0; left:0; height:90vh;"></div>
+    <script>
+
+    function pinSymbol(color) {
+    return {
+        path: 'M 0,0 C -2,-20 -10,-22 -10,-30 A 10,10 0 1,1 10,-30 C 10,-22 2,-20 0,0 z M -2,-30 a 2,2 0 1,1 4,0 2,2 0 1,1 -4,0',
+        fillColor: color,
+        fillOpacity: .75,
+        strokeColor: 'gainsboro',
+        strokeWeight: 1,
+        scale: 1.2,
+   };
+}
+
+        function initMap() {
+            var center = {lat: 20, lng: -55};
+            var map = new google.maps.Map(document.getElementById('map'), {
+              zoom: 2,
+              center: center,
+              gestureHandling: 'greedy',
+            });
+            
+            i = 0;
+            function addmarker(color, lat, lng, participants, content) {
+                i += 1;
+                var infowindow = new google.maps.InfoWindow({
+                    content: content
+                });
+            
+                var marker = new google.maps.Marker({
+                    position: { lat: lat, lng: lng },
+                    map: map,
+                    icon: pinSymbol(color),
+                    title: 'click for more!',
+                    zIndex: i
+                });
+
+                marker.addListener('click', function() {
+                    infowindow.open(map, marker);
+                });
+            }
+
+            {% for post in posts %}
+                addmarker('{{ post.author.profile.map_icon_color }}', {{ post.lat }}, {{ post.lng }}, '{{ post.participants }}', '<h3>{{ post.title }}</h3><h4>{{ post.subtitle }}</h4><p>Author: <span style="font-weight:bold;color:{{ post.author.profile.map_icon_color }};">{{post.author.first_name}} {{post.author.last_name}}</span> <br/>Travelers: {{ post.participants }}<br />Date: {{ post.event_date }}<br />Location: {{ post.loc_name }}<br /><a href="/stories?id={{ post.id }}">Read the story!</a>');
+            {% endfor %}
+        
+        }
+        
+    <!-- {{ post.author.first_name }} -->
+    </script>
+    <script src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js">
+    </script>
+    <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD8qSFrQVgq2dxvkAOaQsFA6bJ3fM5QsRU&callback=initMap">
+    </script>
+        
+    
+
+{% endblock %}

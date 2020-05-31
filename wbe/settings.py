@@ -20,17 +20,23 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'cw&_jspht-z3rka^)l4a5xpo01qr*ov6vy%l2*!2&m7a8kc&u$'
+import os
+SECRET_KEY = os.environ['WBE_SECRETKEY']
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
-
+ALLOWED_HOSTS = [
+    'wevebeeneverywhere.azurewebsites.net', 
+    'localhost', 
+    'wevebeeneverywhere.com',
+    '127.0.0.1'
+]
 
 # Application definition
 
 INSTALLED_APPS = [
+    'blog',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

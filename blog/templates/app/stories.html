@@ -1,0 +1,212 @@
+{% extends "app/layout.html" %}
+
+{% block content %}
+
+<style>
+
+    :target:before {
+        content:"";
+        display:block;
+        height:50px; /* fixed header height*/
+        margin:-50px 0 0; /* negative fixed header height */
+        }
+
+    .story_header{
+        text-align:center;
+    }
+
+    .story_date, .story_location, .story_author, .story_links {
+        margin-top: 0px;
+        margin-bottom: 0px;
+    }
+
+    .story_post{
+        background-color: whitesmoke;
+        margin-bottom:10px;
+        padding:50px;
+    }
+
+    .story_content{
+        margin:auto;
+        padding-top: 10px;
+        max-width: 750px;
+    }
+
+    .story_content > p {
+        text-align: justify;
+        margin-bottom: 20px;
+    }
+
+    img, iframe{
+       display:block;
+       margin: 0px auto 30px !important;
+       border: none;
+    }
+
+    .img_caption {
+        background-color: white;
+        color: #111;
+        text-align:center;
+        padding: 15px
+    }
+    .img_holder {
+        background-color: #ddd;
+    }
+
+    .bottom_options {
+        float:left; 
+        margin:7px 3px;
+        padding:5px;
+    }
+
+    .liked {
+        background-color:#428bca;
+    }
+
+    .comment {
+        padding:6px;
+        margin:0px;
+    }
+    .hoveredcomment {
+        background-color: #ececec;
+    }
+
+    .deletebutton {
+        background-color: darkred;
+        color: white;
+        padding:0px 3px;
+        float:right;
+        border-radius:2px;
+        border: 0px;
+    }
+
+    @media (max-width: 768px) {
+    .story_post{
+        padding: 15px;
+    }
+}
+</style>
+
+<div style="background-color:#444; color: white; padding: 3px;">Explore more with our <a href="{% url 'storyfinder' %}">Story Finder</a>!</div>
+{% for post, liked in posts %}
+    <!-- HEADER -->
+    <div id="story_{{ post.id }}"class="story_post">
+        <div class ="story_header">     
+            <h1>{{ post.title }}</h1>
+            <h3>{{ post.subtitle }}</h3>
+            <p class="story_date">{{ post.participants }} traveling on {{ post.event_date }}</p>
+            <p class="story_location">Location: {{ post.loc_name }}</p>
+            <p class="story_author">Written by: {{ post.author.first_name }} {{ post.author.last_name }}</p>
+        </div>
+        <hr style="border-color: white;"/>
+        <div class="story_content">
+            <!-- CONTENT -->
+            {{ post.content | safe }}
+            <a id="footer_{{ post.id }}" style="top:-250px;"></a>
+            <!-- FOOTER -->
+            <div style="background-color:#ddd; margin:auto; padding:15px;">
+                <!-- LIKE BUTTON -->
+                <div id="like_{{ post.id }}" class="btn btn-{% if liked %}cheered{% else %}default{% endif %} btn-sm bottom_options" onclick="like({{ post.id }})" 
+                   >Cheer! <span id="likeCount_{{ post.id }}">{{ post.like_count }}</span></div>
+                <!-- COMMENT BUTTON -->
+                <button id="comment_{{ post.id }}" class="btn btn-default btn-sm bottom_options" onclick="comment({{ post.id }})">Comment {{ post.comment_count }}</button>
+                <!-- SUBSCRIBE BUTTON -->
+                <button class="btn btn-default btn-sm bottom_options" onclick="email_sub()">Subscribe</button>
+                <!-- DIRECT LINK -->
+                <div class="bottom_options copy_link" style="background-color:white; float:right;" >wevebeeneverywhere.com/stories?id={{ post.id }}</div>
+                <div style="float:right;margin:7px 3px; padding:5px;">Direct Link: </div>
+                <br style="clear:both;" />
+                <div style="display:none; padding:5px;" id="comments_{{ post.id }}">
+                    <!-- If logged in show comment form -->
+                    {% if user.is_authenticated %}
+                    <form action="/action" method="get">
+                      {% csrf_token %}
+                      Commenting as {{ request.user.first_name }} {{ request.user.last_name }}: 
+                        <input type="hidden" name="next" value="{{ request.path }}" />
+                        <input type="text" name="type" value="comment" hidden>
+                        <input type="text" name="target" value="{{ post.id }}" hidden><br />
+                        <textarea cols="200" style="width:90%;" type="text" name="details" value=""></textarea><br />
+                      <button class="btn btn-default" type="submit" value="Submit" style="margin-top:3px; margin-bottom:15px;">Send Comment</button>
+                    </form>
+                    {% else %}
+                    {% load static %}
+                    <!-- LOGIN -->
+                    <h4>You must be signed in to comment!</h4>
+                    <br style="clear:both" />
+                    {% endif %}
+                    <!-- Comment History 
+                    <h4 style="margin-bottom:0px;">Comment History</h4>-->
+                    {% for comment in post.get_comments %}
+                        <div class="comment" data-user="{{ comment.user_id.id }}"><b>{{ comment.user_id.first_name }} {{ comment.user_id.last_name }}:</b> {{ comment.content }} 
+                        <a class="deletebutton" href="/action?type=deletecomment&target={{ comment.id }}&details={{ post.id }}" hidden>X</a>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endfor %}
+
+<div style="margin-left: 15px;">
+    <h3>Read more!</h3>
+    <p><a href="/storyfinder">Checkout the Story Finder</a> or link to...</p>
+    {% for post in post_list %}
+    <p class="story_links">{{ post.date }} - <a href="/stories?id={{ post.id }}">{{ post.title }}</a> - {{ post.loc_name }}</p>
+    {% endfor %}
+</div>
+
+<script>
+
+    function like(post_id) {
+        $('#likeCount_' + post_id).html(parseInt($('#likeCount_' + post_id).html()) + 1)
+        $('#like_' + post_id).addClass("btn-cheered");
+        $.ajax({
+          url: "/action?type=like&target=" + post_id,
+          context: document.body
+        }).done(function() {
+            console.log('Like Sent')
+        });
+    }
+
+    function comment(post_id) {
+        $('#comments_' + post_id).toggle()
+    }
+
+    $('.comment').on('mouseover', function () {
+        $(this).addClass('hoveredcomment');
+        if( $('#userid').text() == $(this).data()['user'] ) {
+            $(this).find('.deletebutton').show();
+        }
+    });
+    $('.comment').on('mouseout', function () {
+        $(this).removeClass('hoveredcomment');
+        $('.deletebutton').hide();
+    });
+
+    // highlight all text in story links
+    $(".copy_link").on('mouseup', function() { 
+        var sel, range;
+        var el = $(this)[0];
+        if (window.getSelection && document.createRange) { //Browser compatibility
+          sel = window.getSelection();
+          if(sel.toString() == ''){ //no text selection
+             window.setTimeout(function(){
+                range = document.createRange(); //range object
+                range.selectNodeContents(el); //sets Range
+                sel.removeAllRanges(); //remove all ranges from selection
+                sel.addRange(range);//add Range to a Selection.
+            },1);
+          }
+        }else if (document.selection) { //older ie
+            sel = document.selection.createRange();
+            if(sel.text == ''){ //no text selection
+                range = document.body.createTextRange();//Creates TextRange object
+                range.moveToElementText(el);//sets Range
+                range.select(); //make selection.
+            }
+        }
+    });
+</script>
+
+{% endblock %}

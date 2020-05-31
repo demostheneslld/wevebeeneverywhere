@@ -1,0 +1,131 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }} - wevebeeneverywhere travel blog</title>
+    <meta name="description" content="{{ description }}" />   
+
+    <!-- Twitter Card data -->
+    <meta name="twitter:card" value="summary">
+
+    {% load static %}
+    <!-- Open Graph data -->
+    <meta property="og:title" content="{{ title }}" />
+    <meta property="og:type" content="{{ og_type }}" />
+    <meta property="og:image" content="{{ og_image }}" />
+    <meta property="og:description" content="{{ description }}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'app/content/bootstrap.min.css' %}" />
+    <link rel="shortcut icon" type="image/png" href="{% static 'app/favicon.ico' %}"/>
+    <link href="https://fonts.googleapis.com/css?family=Amatic+SC" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="/static/app/content/site.css?css={% now "U" %}" />
+    <script src="{% static 'app/scripts/modernizr-2.6.2.js' %}"></script>
+    <script src="{% static 'app/scripts/jquery-1.10.2.js' %}"></script> 
+    <script src="{% static 'app/scripts/custom_helpers.js' %}"></script>
+    <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.0.3/cookieconsent.min.css" />
+    <script src="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.0.3/cookieconsent.min.js"></script>
+    <script>
+    window.addEventListener("load", function(){
+    window.cookieconsent.initialise({
+      "palette": {
+        "popup": {
+          "background": "#efefef",
+          "text": "#404040"
+        },
+        "button": {
+          "background": "black",
+          "text": "white"
+        }
+      },
+      "theme": "edgeless",
+        "content": {
+          "message": "Hi there! We use cookies to make this site better :)"
+        }
+    })});
+    </script>
+</head>
+
+<body>
+    <div class="navbar navbar-fixed-top">
+        <div>
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    Menu
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a href="/" class="navbar-brand"><img src="{% static 'app/images/WBEArrow.svg' %}" style="height:35px; margin:0px;"/></a>
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li><a href="{% url 'map' %}">Map</a></li>
+                    <li><a href="{% url 'stories' %}">Stories</a></li>
+                    <li><a href="/stories?id=21">About</a></li>
+                    <li><a href="{% url 'contact' %}">Contact</a></li>
+                </ul>
+                <!-- RIGHT SIDE NAVBAR IF LOGGED IN -->
+                {% if user.is_authenticated %}
+                <form id="logoutForm" action="/accounts/logout/" method="post" class="navbar-right">
+                    {% csrf_token %}
+                    <ul class="nav navbar-nav navbar-right">
+                        <!-- GREETING AND LINK TO ADMIN IF ADMIN -->
+                        <li style="font-weight:bolder;">
+                            <a style="color:#428bca" href="
+                               {% if perms.permission.change_permission %}
+                               /admin" target="_blank"
+                               {% else %}
+                               /"
+                               {% endif %}
+                               >{{ user.profile.greeting }} {{ request.user.first_name }}!
+                            </a>
+                        </li>
+                        <!-- MODIFY POSTS LINK IF PERMISSION -->
+                        {% if perms.blog_post.change_blog_post %}
+                        <li><a href="{% url 'manage_blog_post_list' %}">Manage Posts</a></li>
+                        {% endif %}
+                        <!-- LOGOUT -->
+                        <li><a href="javascript:document.getElementById('logoutForm').submit()">Log off</a></li>
+                    </ul>
+                    </form>
+                {% else %}
+                    <ul class="nav navbar-nav navbar-right">
+                        <li><a href="{% url 'login' %}">Login</a></li>
+                     </ul>
+                {% endif %}
+                   
+
+            </div>
+        </div>
+    </div>
+    <br style="clear:both; "/>
+    <div id="pagecontent" style ="margin:auto;">
+        {% block content %}{% endblock %}
+        {% include 'app/socialicons.html' %}
+        <hr style="margin-top:80px;"/>
+        <footer style="margin-left:8px;">
+            <p style="float:left;">&copy; {{ year }} - wevebeeneverywhere</p>
+            <a style="float:left; margin-left:20px" href="/privacy">Privacy Policy</a>
+            <a style="float:left; margin-left:20px" href="/terms">Terms of Service</a>
+            
+        </footer>
+        <br />  
+        <hr/>
+    </div>
+
+    <script src="{% static 'app/scripts/bootstrap.js' %}"></script>
+    <script src="{% static 'app/scripts/respond.js' %}"></script>
+{% block scripts %}{% endblock %}
+<script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-100591816-1', 'auto');
+    ga('send', 'pageview');
+
+</script>
+</body>
+</html>

@@ -1,0 +1,49 @@
+{% extends "app/layout.html" %}
+
+{% block content %}
+
+<div style="padding:20px;">
+    
+    <h3>Posts by {{ request.user }}. <a href="/manage/blog_post/add">Add Post</a></h3>
+    <table class="custom sortable">
+        <tr>
+            <th>Event Date</th>
+            <th>Published On</th>
+            <th>Title</th>
+            <th>Subtitle</th>
+            <th></th>
+            <th></th>
+        </tr>
+    {% for post in post_list %}
+        <tr>
+            <td>
+                {{post.event_date}}
+            </td>
+            <td>
+                {{post.publish_date}}
+            </td>
+            <td>
+                 {{ post.title }}
+            </td>
+            <td>
+                {{ post.subtitle }}
+            </td>
+            <td>
+                <a href="/manage/blog_post/{{ post.id }}/change" >edit </a>
+            </td>
+            <td>
+                <a href="/manage/blog_post/{{ post.id }}/delete" class="confirmation">delete </a>
+            </td>
+        </tr>
+    {% endfor %}
+    </table>
+</div>
+{% endblock %}
+
+
+{% block scripts %}
+
+    {% load static %}
+<script src="{% static 'app/scripts/jquery.validate.min.js' %}"></script>
+
+{% endblock %}

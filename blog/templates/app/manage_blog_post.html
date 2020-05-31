@@ -1,0 +1,194 @@
+{% extends "app/layout.html" %}
+
+{% block content %}
+
+<style>
+    input, select{
+        width: 350px;
+        max-width: 350px;
+    }
+    textarea {
+        width:550px;
+        max-width: 550px;
+    }
+
+    @media (max-width: 768px) {
+        input, select, textarea {
+            width: 350px;
+        }
+        form{
+            padding:0px;
+        }
+    }
+</style>
+
+<div style="max-width: 650px; margin:auto; margin-top:30px; float:left;">
+    <a href="/manage/blog_post">Back to post list</a>
+    <h2 style="margin-bottom:10px;">{{ title }}</h2>
+    <ul style="margin-bottom:20px;">
+        <li>Current User: {{ request.user }}</li>
+        <li>Map Icon Color: {{ user.profile.map_icon_color }}</li>
+        {% if request.user.is_staff %}
+        <li><a href="/admin/app/profile/{{ request.user.id }}/change/" target="_blank">Edit Profile</a></li>
+        {% else %}
+        <li>Contact site staff to help change you profile.</li>
+        {% endif %}
+    </ul>
+
+    <br />
+    <a href="#" onclick="$('#code_shortcuts').toggle();">Show/Hide Code Shortcuts</a>
+    <br />
+    <div id="code_shortcuts" style="display:none;">
+        <h4>Image Code with Caption</h4>
+        <p>To use: <i>Copy and paste, then replace the caption and "src" attribute</i></p>
+        <pre><code>&lt;div class="img_holder"&gt;&lt;div class="img_caption"&gt;CAPTION GOES HERE&lt;/div&gt;&lt;img style="width:100%; max-width:350px;" src="http://i.imgur.com/sVg4kw3.jpg"&gt;&lt;/div&gt;</code></pre>
+        <h4>Image Code without Caption </h4>
+        <p>To use: <i>Copy and paste, then replace the "src" attribute</i></p>
+        <pre><code>&lt;div class="img_holder"&gt;&lt;img style="width:100%; max-width:350px;" src="http://i.imgur.com/sVg4kw3.jpg"&gt;&lt;/div&gt;</code></pre>
+    </div>
+
+    <form style="margin-top:20px; background-color:whitesmoke; padding: 50px;" action="." method="post">
+        {% csrf_token %}
+        {% for field in BlogPostForm %}
+            <div class="form-label">{{ field.label_tag }}</div> <div style="min-width:200px;"class="form-field">{{ field }}</div>
+            <br style="clear:both;"/>    
+            <div style="color:red;">{{ field.errors }}</div>
+            <br style="clear:both;"/>
+        {% endfor %}
+        {{ form.non_field_errors }}
+        <input type="submit" value="Submit" />
+    </form>
+</div>
+
+<style>
+
+    :target:before {
+        content:"";
+        display:block;
+        height:50px; /* fixed header height*/
+        margin:-50px 0 0; /* negative fixed header height */
+        }
+
+    .story_header{
+        text-align:center;
+    }
+
+    .story_date, .story_location, .story_author, .story_links {
+        margin-top: 0px;
+        margin-bottom: 0px;
+    }
+
+    .story_post{
+        background-color: whitesmoke;
+        margin-top:10px;
+        padding:50px;
+    }
+
+    .story_post:hover{
+        border: 1px solid #bbb;
+    }
+
+    .story_content{
+        margin:auto;
+        padding-top: 10px;
+        max-width: 750px;
+    }
+
+    .story_content > p {
+        text-align: justify;
+        margin-bottom: 20px;
+    }
+
+    img, iframe{
+       display:block;
+       margin: 0px auto 30px !important;
+       border: none;
+    }
+
+    .img_caption {
+        background-color: white;
+        color: #111;
+        text-align:center;
+        padding: 15px
+    }
+    .img_holder {
+        background-color: #ddd;
+    }
+
+    #linkcopied {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      display:none;
+      background-color: white;
+      padding:50px 100px;
+      /* bring your own prefixes */
+      transform: translate(-50%, -50%);
+    }
+
+    @media (max-width: 768px) {
+    .story_post{
+        padding: 15px;
+    }
+}
+</style>
+
+<h2 style="max-width:550px; margin-left:50px;margin-top:70px; float:left;">Post Preview</h2>
+<div style="max-width: 550px; margin-left:50px; margin-top:30px; float:left; max-height:1050px; overflow:auto;" id="preview">
+    <div class="story_post">
+        <div class ="story_header">     
+            <h1 id='title_preview'></h1>
+            <h3 id="subtitle_preview"></h3>
+            <p class="story_date"><span id="participants_preview"></span> traveling on <span id="event_date_preview"></span></p>
+            <p class="story_location">Location: <span id="loc_name_preview"></span></p>
+            <p class="story_author">Written by: {{ request.user.first_name }} {{ request.user.last_name }}</p>
+        </div>
+        <hr style="border-color: white;"/>
+        <div class="story_content">
+            <span id="content_preview"></span>
+            
+            <div style="background-color:#ddd; margin:auto; padding:15px;">
+                Social icons and sharing links go here.
+            </div>
+        </div>
+    </div>
+</div>
+
+<br style="clear:both;" />
+
+<script>
+    $(document).ready(function () {
+        $(document).keyup(function (e) {
+            generate_preview();
+        })
+    });
+
+    generate_preview();
+
+    function generate_preview() {
+
+        var title = $('#id_title').val()
+        var subtitle = $('#id_subtitle').val()
+        var participants = $('#id_participants').val()
+        var event_date = $('#id_event_date').val()
+        var loc_name = $('#id_loc_name').val()
+        var content = $('#id_content').val()
+        
+        $('#title_preview').html(title);
+        $('#subtitle_preview').html(subtitle);
+        $('#participants_preview').html(participants);
+        $('#event_date_preview').html(event_date);
+        $('#loc_name_preview').html(loc_name);
+        $('#content_preview').html(content);
+        
+    }
+</script>
+{% endblock %}
+
+
+{% block scripts %}
+
+    {% load static %}
+<script src="{% static 'app/scripts/jquery.validate.min.js' %}"></script>
+
+{% endblock %}

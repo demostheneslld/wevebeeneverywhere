@@ -1,0 +1,95 @@
+{% extends "app/layout.html" %}
+
+{% block content %}
+
+<script>
+function getUrlVars()
+{
+    var vars = [], hash;
+    var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+    for(var i = 0; i < hashes.length; i++)
+    {
+            hash = hashes[i].split('=');                        
+            vars[hash[0]] = hash[1];
+    }
+    return vars;
+}
+
+var url_vars = getUrlVars();
+for(var i in url_vars)
+{
+    $('#' + i).val(url_vars[i]);
+}   
+</script>
+
+<style>
+    .leftformsection {
+        width: 200px;
+        float:left;
+    }
+    input {
+        width:150px;
+    }
+</style>
+
+<div style="padding:20px; min-width:1000px; background-color:white;">
+    <h3>Posts filters.</h3>
+    <p>Click on a column to sort! Title links to story.</p>
+
+<form action="/storyfinder" method="get" style="padding:20px; background-color:whitesmoke; margin-bottom:20px; display:none;">
+    <div><div class="leftformsection">Published Between:</div> <input type="date" id="p_min" name="p_min" /> and <input type="date" id="p_max" name="p_max" /></div>
+    <div><div class="leftformsection">Happened Between:</div> <input type="date" id="h_min" name="h_min" /> and <input type="date" id="h_max" name="h_max" /></div>
+    <div><div class="leftformsection">Score Between:</div> <input type="number" id="s_min" name="s_min" /> and <input type="number" id="s_max" name="s_max" /></div>
+    <div><div class="leftformsection">Author:</div> <input type="text" id="author" name="author" /> </div>
+    <div><div class="leftformsection">Location:</div> <input type="text" id="loc" name="loc" /> </div>
+    <input type="submit" value="Submit" />
+</form>
+
+    <table class="custom sortable" style="width:100%; min-width:600px;">
+        <tr>
+            <th>Event Date</th>
+            <th>Published On</th>
+            <th>Title</th>
+            <th>Subtitle</th>
+            <th>Location</th>
+            <th>Score</th>
+            <th>Author</th>
+            <th>Cheers</th>
+            <th>Comments</th>
+        </tr>
+    {% for post in post_list %}
+        <tr>
+            <td>
+                {{post.event_date|date:"Y/m/d"}}
+            </td>
+            <td>
+                {{post.publish_date|date:"Y/m/d"}}
+            </td>
+            <td>
+                 <a href="/stories?id={{ post.id }}">{{ post.title }}</a>
+            </td>
+            <td>
+                {{ post.subtitle }}
+            </td>
+            <td>
+                {{ post.loc_name }}
+            </td>
+            <td>
+                <span style="display: none;">{{ post.score }}</span> {{ post.get_score_display }}
+            </td>
+            <td>
+                {{ post.author.first_name }} {{ post.author.last_name }} 
+            </td>
+            <td>
+                {{ post.like_count }} 
+            </td>
+            <td>
+                {{ post.comment_count }} 
+            </td>
+        </tr>
+    {% endfor %}
+    </table>
+</div>
+
+
+{% endblock %}
