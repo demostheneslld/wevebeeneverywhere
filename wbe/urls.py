@@ -12,23 +12,20 @@ Class-based views
 Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
-"""
-"""
+
 Definition of urls for wbe.
 """
 
-from datetime import datetime
 from django.conf.urls import url
-import django.contrib.auth.views
-from django.contrib.staticfiles.urls import staticfiles_urlpatterns
+from django.conf.urls import include
+from django.contrib import admin
+from django.urls import path
 
 import blog.forms
 import blog.views
 
 # Uncomment the next lines to enable the admin:
-from django.conf.urls import include
-from django.contrib import admin
-from django.urls import path, re_path
+
 admin.autodiscover()
 
 urlpatterns = [

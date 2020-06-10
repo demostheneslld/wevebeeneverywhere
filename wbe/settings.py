@@ -26,8 +26,8 @@ SECRET_KEY = os.environ['WBE_SECRETKEY']
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    'wevebeeneverywhere.azurewebsites.net', 
-    'localhost', 
+    'wevebeeneverywhere.azurewebsites.net',
+    'localhost',
     'wevebeeneverywhere.com',
     '127.0.0.1'
 ]
