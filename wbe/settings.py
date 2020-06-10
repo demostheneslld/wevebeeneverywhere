@@ -20,7 +20,6 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-import os
 SECRET_KEY = os.environ['WBE_SECRETKEY']
 
 # SECURITY WARNING: don't run with debug turned on in production!
@@ -90,6 +89,7 @@ DATABASES = {
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
 
+LOGIN_REDIRECT_URL = '/'
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',

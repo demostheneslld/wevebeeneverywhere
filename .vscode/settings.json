@@ -1,4 +1,7 @@
 {
-    "python.pythonPath": "env\\Scripts\\python.exe",
-    "git.ignoreLimitWarning": true
+    "python.pythonPath": "C:\\Users\\natha\\AppData\\Local\\Programs\\Python\\Python38-32\\python.exe",
+    "python.venvPath": "env\\Scripts\\python.exe",
+    "python.linting.pylintArgs": [
+        "--load-plugins=pylint_django"
+   ]
 }
