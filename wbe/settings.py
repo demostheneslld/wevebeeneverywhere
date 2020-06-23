@@ -23,14 +23,11 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = os.environ['WBE_SECRETKEY']
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = int(os.environ.get("WBE_DEBUG", default=0))
 
-ALLOWED_HOSTS = [
-    'wevebeeneverywhere.azurewebsites.net',
-    'localhost',
-    'wevebeeneverywhere.com',
-    '127.0.0.1'
-]
+# 'DJANGO_ALLOWED_HOSTS' should be a single string of hosts with a space between each.
+# For example: 'DJANGO_ALLOWED_HOSTS=localhost 127.0.0.1 [::1]'
+ALLOWED_HOSTS = os.environ.get("WBE_ALLOWED_HOSTS").split(" ")
 
 # Application definition
 
