@@ -2,10 +2,10 @@ version: '3.7'
 
 services:
     wevebeeneverywhere:
-      build: ./blog
+      image: wevebeeneverywhere
       command: python manage.py runserver 0.0.0.0:8000
       volumes:
-        - ./blog/:/usr/src/blog/
+        - .:/usr/src/wevebeeneverywhere/
       ports:
         - 8000:8000
       env_file:
