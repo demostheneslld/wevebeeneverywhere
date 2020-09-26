@@ -10,7 +10,7 @@
             "request": "launch",
             "program": "${workspaceFolder}\\manage.py",
             "args": [
-                "runserver 80",
+                "runserver",
                 "--noreload"
             ],
             "django": true
