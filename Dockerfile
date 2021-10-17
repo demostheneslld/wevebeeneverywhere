@@ -13,8 +13,11 @@ ENV PYTHONUNBUFFERED 1
 # copy project
 COPY . .
 
-# install dependencies
-RUN pip install --upgrade pip && \
+# install dependencies in new virtual env
+RUN python -m venv ./env \
+    chmod +x ./env/bin/activate \
+    ./env/bin/activate \
+    pip install --upgrade pip && \
     pip install -r requirements.txt
 
 EXPOSE 8000
