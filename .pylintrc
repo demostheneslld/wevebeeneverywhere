@@ -1,2 +1,3 @@
 [FORMAT]
 max-line-length=240
+docstring-min-length=250

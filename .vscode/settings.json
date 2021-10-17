@@ -5,5 +5,6 @@
         "--load-plugins=pylint_django"
 ],
 "appService.defaultWebAppToDeploy": "/subscriptions/ddc2e845-9608-4b71-98e6-afbca62c6134/resourceGroups/public_sites/providers/Microsoft.Web/sites/wevebeeneverywhere",
-"appService.deploySubpath": "."
+"appService.deploySubpath": ".",
+"python.linting.pylintEnabled": true
 }
