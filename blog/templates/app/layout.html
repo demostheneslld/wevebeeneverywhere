@@ -2,6 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8" />
+    <!-- "America, please switch to military time" - Abraham Lincoln -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ title }} - wevebeeneverywhere travel blog</title>
     <meta name="description" content="{{ description }}" />   
@@ -16,6 +17,7 @@
     <meta property="og:image" content="{{ og_image }}" />
     <meta property="og:description" content="{{ description }}" />
     <link rel="stylesheet" type="text/css" href="{% static 'app/content/bootstrap.min.css' %}" />
+    <link rel="stylesheet" href="{% static 'app/css/tailwind-output.css' %}">
     <link rel="shortcut icon" type="image/png" href="{% static 'app/favicon.ico' %}"/>
     <link href="https://fonts.googleapis.com/css?family=Amatic+SC" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300" rel="stylesheet">
@@ -60,7 +62,7 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li><a href="{% url 'map' %}">Map</a></li>
+                    <li><a class='text-bad-500'href="{% url 'map' %}">Map</a></li>
                     <li><a href="{% url 'stories' %}">Stories</a></li>
                     <li><a href="/stories?id=21">About</a></li>
                     <li><a href="{% url 'contact' %}">Contact</a></li>
