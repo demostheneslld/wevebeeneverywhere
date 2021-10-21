@@ -1,2 +1,3 @@
-./env/bin/python manage.py collectstatic --noinput
-./env/bin/python manage.py runserver 0.0.0.0:8000
+source ./env/bin/activate
+python3 manage.py collectstatic --noinput
+python3 manage.py runserver 127.0.0.1:8000
