@@ -122,3 +122,4 @@ dmypy.json
 .env
 env
 staticfiles
+jstoolchain/node_modules
