@@ -2,29 +2,24 @@
 Definition of views.
 """
 
-from django.shortcuts import render, get_object_or_404, redirect
-from django.contrib.auth.decorators import permission_required, login_required
-from django.http import HttpRequest
-from django.template import RequestContext
 from datetime import datetime
+from django.shortcuts import render, get_object_or_404, redirect
+from django.contrib.auth.decorators import permission_required
+from django.http import HttpRequest
 from blog.models import blog_post
 from blog.models import post_interactions
-import pytz
-from django.utils import timezone
-from django.db.models import Count, Min, Sum, Avg
-
 from blog.forms import BlogPostForm
 from blog.forms import BlogPostFilterForm
 
 # HELPER FUNCTIONS
-def getposts(request, topx = None, sort = '-publish_date', id = 'all', author = 'all', PublishedOnly=True):
+def getposts(request, topx=None, sort='-publish_date', id='all', author='all', PublishedOnly=True):
     posts = blog_post.objects.all().order_by(sort).defer('content')
 
-    if (str(id) != 'all'):
-        posts = posts.filter(id = id)
+    if str(id) != 'all':
+        posts = posts.filter(id=id)
 
-    if (str(author) != 'all'):
-        posts = posts.filter(author = author)
+    if str(author) != 'all':
+        posts = posts.filter(author=author)
 
     if (PublishedOnly):
         posts = posts.filter(publish_date__lte=datetime.now())
@@ -42,41 +37,27 @@ def get_client_ip(request):
     return ip
 
 def action(request):
-
-    debug = request.GET.get('debug','false')
-    type = request.GET.get('type','')
-    target = request.GET.get('target','')
-    details = request.GET.get('details','')
-    debugtxt = '<h2>Debug Information</h2>'
+    request_type = request.GET.get('type', '')
+    target = request.GET.get('target', '')
+    details = request.GET.get('details', '')
     current_user = None
     if request.user.is_authenticated:
         current_user = request.user
-    if (type == "like"):
+    if request_type == "like":
         newlike = post_interactions( 
-            user_id = current_user,
-            post_id = getposts(request, id=target)[0],
-            type=type)
+            user_id=current_user,
+            post_id=getposts(request, id=target)[0],
+            request_type=request_type)
         newlike.save()
         return redirect('/stories?id=' + target)
-    if (type == "comment"):
+    if type == "comment":
         comment = post_interactions(
-            user_id = request.user,
-            post_id = getposts(request, id=target)[0],
+            user_id=request.user,
+            post_id=getposts(request, id=target)[0],
             content=details,
-            type= type)
+            request_type=request_type)
         comment.save()
         return redirect('/stories?id=' + target)
-    if (debug == "true"):
-        if not request.user.is_authenticated:
-            return redirect('/login')
-        else:
-            return render(
-            request,
-            'app/debug.html',
-            {
-                'content': debugtxt
-            }
-        )
     else:
         pass
 
@@ -86,7 +67,7 @@ def home(request):
     story_count = getposts(request).count()
     return render(
         request,
-        'app/index.html',
+        'app/views/index.html',
         {
             'title':'Home',
             'description': 'Explore everywhere with us!',
@@ -102,7 +83,7 @@ def map(request):
     posts = getposts(request, sort='publish_date')
     return render(
         request,
-        'app/map.html',
+        'app/views/map.html',
         {
             'title':'Map',
             'description' : 'Map of our adventures!',
@@ -151,7 +132,7 @@ def stories(request):
 
     return render(
         request,
-        'app/stories.html',
+        'app/views/stories.html',
         {
             'title' : title,
             'description' : description,
@@ -175,7 +156,7 @@ def storyfinder(request):
     form = BlogPostFilterForm(request.GET)
     return render(
         request,
-        'app/storyfinder.html',
+        'app/views/storyfinder.html',
         {
             'title' : title,
             'description' : description,
@@ -191,7 +172,7 @@ def contact(request):
     assert isinstance(request, HttpRequest)
     return render(
         request,
-        'app/contact.html',
+        'app/views/contact.html',
         {
             'title':'Contact',
             'message':'Get in touch!',
@@ -207,7 +188,7 @@ def sitemap(request):
     post_list = getposts(request)
     return render(
         request,
-        'app/sitemap.html',
+        'app/views/sitemap.html',
         {
             'post_list' : post_list,
             'year':datetime.now().year,
@@ -222,7 +203,7 @@ def manage_blog_post_list(request):
 
     return render(
         request,
-        'app/manage_blog_post_list.html',
+        'app/views/manage_blog_post_list.html',
         {
             'post_list' : post_list,
         }
@@ -240,7 +221,7 @@ def manage_blog_post_add(request):
             return redirect('manage_blog_post_change', pk=post.pk)
     else:
         form = BlogPostForm()
-    return render(request, 'app/manage_blog_post.html', 
+    return render(request, 'app/views/manage_blog_post.html', 
                     {
                     'BlogPostForm': form
                     , 'title': 'Add Post'
@@ -261,7 +242,7 @@ def manage_blog_post_change(request, pk):
         else:
             form = BlogPostForm(instance = post)
             return render(request
-                          , 'app/manage_blog_post.html', 
+                          , 'app/views/manage_blog_post.html', 
                             {
                             'BlogPostForm': form
                             , 'title': 'Edit Post: ' + post.title
@@ -282,7 +263,7 @@ def privacy(request):
     assert isinstance(request, HttpRequest)
     return render(
         request,
-        'app/_privacy.html',
+        'app/views/_privacy.html',
         {
             'title':'Privacy',
             'og_type': 'website',
@@ -295,7 +276,7 @@ def terms(request):
     assert isinstance(request, HttpRequest)
     return render(
         request,
-        'app/_terms.html',
+        'app/views/_terms.html',
         {
             'title':'Terms of Service',
             'og_type': 'website',

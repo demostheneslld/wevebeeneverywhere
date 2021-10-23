@@ -1,0 +1,44 @@
+{% load static %}
+<head>
+    <meta charset="utf-8" />
+    <!-- "America, please switch to military time" - Abraham Lincoln -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }} - wevebeeneverywhere travel blog</title>
+    <meta name="description" content="{{ description }}" />   
+    <!-- Twitter Card data -->
+    <meta name="twitter:card" value="summary">
+    <!-- Open Graph data -->
+    <meta property="og:title" content="{{ title }}" />
+    <meta property="og:type" content="{{ og_type }}" />
+    <meta property="og:image" content="{{ og_image }}" />
+    <meta property="og:description" content="{{ description }}" />
+    <!-- CSS -->
+    <link rel="stylesheet" href="{% static 'app/css/tailwind-output.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'app/css/site.css'%}?css={% now 'U' %}" />
+    <!-- Fonts and Icon -->
+    <link rel="shortcut icon" type="image/png" href="{% static 'app/favicon.ico' %}"/>
+    <link href="https://fonts.googleapis.com/css?family=Amatic+SC" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300" rel="stylesheet">
+    <!-- JS -->
+    <script src="{% static 'app/scripts/custom_helpers.js' %}"></script>
+    <script>
+        window.addEventListener("load", function(){
+            window.cookieconsent.initialise({
+                "palette": {
+                "popup": {
+                    "background": "#efefef",
+                    "text": "#404040"
+                },
+                "button": {
+                    "background": "black",
+                    "text": "white"
+                }
+                },
+                "theme": "edgeless",
+                "content": {
+                    "message": "Hi there! We use cookies to make this site better :)"
+                }
+            });
+        });
+    </script>
+</head>

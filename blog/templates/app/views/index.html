@@ -1,0 +1,21 @@
+{% extends "app/structure/layout.html" %}
+{% load static %}
+{% block content %}
+
+<div class=''>
+    <div class='bg-gray-100 p-8 flex justify-start items-center gap-x-8'>
+        <div>
+            <h1>Explore everywhere with us </h1>
+            <p>Join us, Nathan and Molly, as we travel the world. <b>{{ story_count }} destinations explored, and counting!</b></p>
+            <div class='flex gap-x-2 mt-4'>
+                <a class="bg-accent-200 hover:bg-accent-300 px-2 py-4 rounded" href="/stories">Click here to read our recent stories</a>
+                <a class="bg-accent-200 hover:bg-accent-300 px-2 py-4 rounded" href="/map">Travel Map</a>
+                <a class="bg-accent-200 hover:bg-accent-300 px-2 py-4 rounded" href="/storyfinder">Story Finder</a>
+                <button class="bg-accent-200 hover:bg-accent-300 px-2 py-4 rounded" onclick="email_sub()">Subscribe to our email list</button>
+            </div>
+        </div>
+        <img style="width:170px; margin-top:30px;" src="{% static 'app/images/WBE.svg' %}" alt="Passport Stamp"/>
+    </div>
+    <img style="width:100%;" src="http://i.imgur.com/X2Bnl2x.png" alt="Polaroids and beer"/>
+</div>
+{% endblock %}

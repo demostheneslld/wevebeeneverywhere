@@ -1,10 +1,4 @@
-﻿html {
-    background-color: white;
-}
-
-body {
-    padding-top: 50px;
-    padding-bottom: 20px;
+﻿body {
     font-family: 'Open Sans Condensed', sans-serif;
     font-weight: 300;
     font-size: 16px;
@@ -15,6 +9,7 @@ h1, h2, h3, h4, h5, h6 {
     font-family: 'Amatic SC', cursive !important;
     font-weight: bold;
     font-size: 20px;
+    line-height: normal;
     color: #444;
 }
 
@@ -22,33 +17,6 @@ h1 { font-size: 3.6em; }
 h2 { font-size: 3em; }
 h3 { font-size: 2.5em; }
 h4 { font-size: 2em; }
-
-/**/
-.navbar-fixed-top {
-    background-color: white;
-}
-
-.navbar-nav > li > a, .navbar-brand {
-    color: black !important;
-}
-
-.navbar-brand{
-    padding-top: 15px;
-    padding-bottom: 5px;
-    padding-left: 15px;
-    max-height: 55px;
-}
-
-
-.icon-bar {
-    border-bottom: 1px solid gainsboro;
-    width: 100% !important;
-}
-/* Set padding to keep content from hitting the edges */
-.body-content {
-    padding-left: 15px;
-    padding-right: 15px;
-}
 
 .btn {
     margin-right: 3px;
@@ -132,14 +100,6 @@ input[type="checkbox"].input-validation-error {
 }
 
 @media (max-width: 768px) {
-    .container {
-        width: 100%;
-    }
-
-    .body-content {
-        padding: 1px;
-    }
-
     .form-vertical {
         width: 100%;
     }
@@ -147,9 +107,5 @@ input[type="checkbox"].input-validation-error {
     .form-field {
         clear:left;
         float: left;
-    }
-
-    .navbar-fixed-top {
-        height: auto;
     }
 }

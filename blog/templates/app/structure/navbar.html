@@ -1,0 +1,58 @@
+{% load static %}
+<div>
+    {% with nav_link_class="bg-gray-200 hover:bg-primary-300 px-2 py-4 rounded" %} 
+    <div class="flex justify-between items-center p-4">
+        <!-- Left Side Navbar -->
+        <div class="flex gap-x-4 items-center">
+            <!-- Logo -->`
+            <a href="/"><img src="{% static 'app/images/WBEArrow.svg' %}" class='h-12 mr-4'/></a>
+            <!-- Large Screen Navigation -->
+            <div class='hidden md:flex gap-x-2'>
+                <a class='{{nav_link_class}}' href="{% url 'map' %}">Map</a>
+                <a class='{{nav_link_class}}' href="{% url 'stories' %}">Stories</a>
+                <a class='{{nav_link_class}}' href="/stories?id=21">About</a>
+                <a class='{{nav_link_class}}' href="{% url 'contact' %}">Contact</a>
+            </div>
+        </div>
+        <!-- Right Side Navbar -->
+        <div>
+            <!-- Authenticated -->
+            {% if user.is_authenticated %}
+                <form id="logoutForm" action="/accounts/logout/" method="post" class="">
+                    {% csrf_token %}
+                    <ul class="=t">
+                        <!-- Greeting and Link to Admin if Admin -->
+                        <li style="font-weight:bolder;">
+                            <a style="color:#428bca" href='
+                            {% if perms.permission.change_permission %}
+                                /admin' target='_blank'
+                            {% else %}
+                                /'
+                            {% endif %}
+                            >
+                                {{ user.profile.greeting }} {{ request.user.first_name }}!
+                            </a>
+                        </li>
+                        <!-- Modify Posts Link if Permission -->
+                        {% if perms.blog_post.change_blog_post %}
+                        <li><a href="{% url 'manage_blog_post_list' %}">Manage Posts</a></li>
+                        {% endif %}
+                        <!-- Logout -->
+                        <li><a href="javascript:document.getElementById('logoutForm').submit()">Log off</a></li>
+                    </ul>
+                </form>
+            <!-- Not Authenticated -->
+            {% else %}
+                <a class='{{nav_link_class}}' href="{% url 'login' %}">Login</a>
+            {% endif %}
+        </div>
+    </div>
+    <!-- Small Screen Navigation -->
+    <div class='border-t border-b border-gray-200 flex md:hidden justify-center gap-x-2 p-2'>
+        <a class='{{nav_link_class}}' href="{% url 'map' %}">Map</a>
+        <a class='{{nav_link_class}}' href="{% url 'stories' %}">Stories</a>
+        <a class='{{nav_link_class}}' href="/stories?id=21">About</a>
+        <a class='{{nav_link_class}}' href="{% url 'contact' %}">Contact</a>
+    </div>
+    {% endwith %}
+</div>

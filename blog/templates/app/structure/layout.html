@@ -1,0 +1,17 @@
+﻿<!DOCTYPE html>
+<html>
+{% include 'app/structure/head.html' %}
+<body>
+    <div class='flex flex-col justify-between min-h-screen'>
+        <div>
+            {% include 'app/structure/navbar.html' %}
+            <div class=''>
+                {% block content %}{% endblock %}
+            </div>
+        </div>
+        <div>
+            {% include 'app/structure/footer.html' %}
+        </div>
+    </div>
+</body>
+</html>
