@@ -10,7 +10,7 @@
   },
   "devDependencies": {},
   "scripts": {
-    "build": "postcss css/tailwind.css -o ../blog/static/app/css/tailwind-output.css",
+    "build": "postcss css/tailwind.sass -o ../blog/static/app/css/tailwind-output.css",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",

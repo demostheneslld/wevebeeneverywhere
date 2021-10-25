@@ -1,0 +1,67 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Main Divs */
+body {
+    font-family: 'Open Sans Condensed', sans-serif;
+    @apply text-black;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Amatic SC', cursive !important;
+    @apply mb-2;
+    @apply font-bold;
+    @apply text-lg;
+    @apply text-gray-700;
+}
+
+h1 { @apply text-6xl; }
+h2 { @apply text-5xl; }
+h3 { @apply text-4xl; }
+h4 { @apply text-2xl; } 
+p { @apply text-base; }
+
+
+/* General Content */
+.content-padded {
+    @apply p-4 md:py-12 md:px-8;
+}
+a.link {
+    @apply text-accent-500 hover:text-accent-600;
+    @apply hover:underline;
+}
+
+/* Buttons */
+.btn {
+    @apply flex items-center justify-center text-center;
+    @apply rounded;
+    @apply px-4 py-4;
+    min-width: 5em;
+}
+
+.btn-short {
+    @apply btn;
+    @apply px-4 py-2;
+}
+
+.btn-white {
+    @apply bg-white;
+    @apply hover:bg-gray-200;
+    @apply border border-gray-200;
+}
+
+.btn-primary {
+    @apply bg-primary-200;
+    @apply hover:bg-primary-300;
+}
+
+.btn-accent {
+    @apply bg-accent-200;
+    @apply hover:bg-accent-300;
+}
+
+.btn-accent-dark {
+    @apply bg-accent-600 text-gray-50;
+    @apply hover:bg-accent-700;
+}
