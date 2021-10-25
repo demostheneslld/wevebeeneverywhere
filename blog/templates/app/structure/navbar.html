@@ -1,15 +1,15 @@
 {% load static %}
 <div>
-    <div class="flex justify-center md:justify-between items-center gap-x-4 p-4 w-full sticky top-0">
+    <div class="flex justify-center md:justify-between items-center gap-x-4 p-3 w-full sticky top-0">
         <!-- Left Side Navbar -->
-        <div class="flex gap-x-4 items-center">
+        <div class="flex gap-x-2 items-center justify-center">
             <!-- Logo -->
-            <div class='flex items-center justify-center'>
+            <div class='flex items-center justify-center px-4 rounded'>
                 <a 
-                    class=''
+                    class='h-12'
                     href="/"
                 >
-                    <img src="{% static 'app/images/WBEArrow.svg' %}" class='h-12 mr-4'/>
+                    <img src="{% static 'app/images/WBEArrow.svg' %}" class='h-12'/>
                 </a>
             </div>
             <!-- Large Screen Navigation -->
@@ -24,7 +24,9 @@
     </div>
     <!-- Small Screen Navigation -->
     <div class='md:hidden border-t border-b border-gray-200 p-2'>
-        <div class='flex md:hidden justify-center gap-x-2 mb-2'>{% include 'app/structure/navlinks.html' %}</div>
-        <div class='flex md:hidden justify-center gap-x-2'>{% include 'app/structure/auth-navlinks.html' %}</div>
+        <div class='flex md:hidden justify-center gap-x-2'>{% include 'app/structure/navlinks.html' %}</div>
+        {% if user.is_authenticated %}
+            <div class='flex md:hidden justify-center gap-x-2 mt-2'>{% include 'app/structure/auth-navlinks.html' %}</div>
+        {% endif %}
     </div>
 </div>

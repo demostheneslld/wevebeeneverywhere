@@ -2,3 +2,6 @@
 <a class='btn btn-white' href="{% url 'storyfinder' %}">Story Finder</a>
 <a class='btn btn-white' href="/stories?id=21">About</a>
 <a class='btn btn-white' href="{% url 'contact' %}">Contact</a>
+{% if not user.is_authenticated %}
+<a class='md:hidden btn btn-white' href="{% url 'login' %}">Login</a>
+{% endif %}
