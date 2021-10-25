@@ -1,0 +1,26 @@
+<!-- Authenticated -->
+{% if user.is_authenticated %}
+    <form class='flex gap-x-2 items-center' id="logoutForm" action="/accounts/logout/" method="post" class="">
+        {% csrf_token %}
+        <!-- Greeting and Link to Admin if Admin -->
+        <a class='btn btn-white' href='
+        {% if perms.permission.change_permission %}
+            /admin target='_blank'
+        {% else %}
+            /
+        {% endif %}
+        '
+        >
+            {{ user.profile.greeting }} {{ request.user.first_name }}!
+        </a>
+        <!-- Modify Posts Link if Permission -->
+        {% if perms.blog_post.change_blog_post %}
+        <a class='btn btn-white' href="{% url 'manage_blog_post_list' %}">Manage Posts</a>
+        {% endif %}
+        <!-- Logout -->
+        <a class='btn btn-white' href="javascript:document.getElementById('logoutForm').submit()">Log off</a>
+    </form>
+    <!-- Not Authenticated -->
+{% else %}
+    <a class='btn btn-white' href="{% url 'login' %}">Login</a>
+{% endif %}

@@ -1,38 +1,36 @@
 {% extends 'app/structure/layout.html' %}
 {% load static %}
 {% block content %}
-<div class="body-content">
-    <br style="clear:both;" />
-
+<div class="content-padded flex flex-col gap-y-2 max-w-lg">
+    <div>
+        <h1>Login</h1>
+    </div>
     {% if form.errors %}
     <p>Your username and password didn't match. Please try again.</p>
     {% endif %}
 
     {% if next %}
         {% if user.is_authenticated %}
-        <h1 class="h3 mb-3 font-weight-normal">Your account doesn't have access to this page. To proceed,
-            please login with an account that has access.</h1>
+        <p class="h3 mb-3 font-weight-normal">Your account doesn't have access to this page. To proceed,
+            please login with an account that has access.</p>
         {% endif %}
     {% endif %}
 
-
-    <form action="{% url 'login' %}" method="post">
+    <form class="flex flex-col gap-y-2" action="{% url 'login' %}" method="post">
         {% csrf_token %}
         {% for field in form %}
-        <div class="input-group mb-3">
-            <div class="input-group-prepend">
-            <span class="input-group-text" id="basic-addon1">{{ field.label_tag }}</span>
+            <div>
+                <span class="input-group-text" id="basic-addon1">{{ field.label_tag }}</span>
+                <div class="form-control" placeholder="Username" aria-label="Username" aria-describedby="basic-addon1">{{ field }}</div>
             </div>
-            <div class="form-control" placeholder="Username" aria-label="Username" aria-describedby="basic-addon1">{{ field }}</div>
-        </div>
-        <div style="color:red;">{{ field.errors }}</div>
+            <div class='text-bad-600'>{{ field.errors }}</div>
         {% endfor %}
         {{ form.non_field_errors }}
-        <button class="customButton" type="submit" value="login">Sign in</button>
+        <button class="btn btn-primary" type="submit" value="login">Sign in</button>
         <input type="hidden" name="next" value="{{ next }}">
     </form>
     <p>
-        <a href="{% url 'password_reset' %}">Lost password?</a>
+        <a class='link' href="{% url 'password_reset' %}">Lost password?</a>
     </p>
 </div>
 {% endblock %}

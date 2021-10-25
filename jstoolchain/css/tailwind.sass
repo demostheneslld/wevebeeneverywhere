@@ -28,7 +28,7 @@ p { @apply text-base; }
     @apply p-4 md:py-12 md:px-8;
 }
 a.link {
-    @apply text-accent-500 hover:text-accent-600;
+    @apply text-accent-600 hover:text-accent-700;
     @apply hover:underline;
 }
 
@@ -49,6 +49,16 @@ a.link {
     @apply bg-white;
     @apply hover:bg-gray-200;
     @apply border border-gray-200;
+}
+
+.btn-bad {
+    @apply bg-bad-500;
+    @apply hover:bg-bad-600;
+}
+
+.btn-good {
+    @apply bg-good-500;
+    @apply hover:bg-good-600;
 }
 
 .btn-primary {
@@ -74,6 +84,7 @@ a.link {
 input,
 select,
 textarea {
+    @apply w-full;
     @apply px-4 py-2 rounded;
     @apply border border-gray-200;
     @apply focus:ring-1 focus:ring-gray-400 focus-visible:ring-1 focus-visible:ring-gray-400 !important;

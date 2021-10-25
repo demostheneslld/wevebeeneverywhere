@@ -28808,12 +28808,12 @@ p { font-size: 1rem; line-height: 1.5rem;
 
 a.link {
   --tw-text-opacity: 1;
-  color: rgba(59, 130, 246, var(--tw-text-opacity));
+  color: rgba(37, 99, 235, var(--tw-text-opacity));
 }
 
 a.link:hover {
   --tw-text-opacity: 1;
-  color: rgba(37, 99, 235, var(--tw-text-opacity));
+  color: rgba(29, 78, 216, var(--tw-text-opacity));
 }
 
 a.link:hover {
@@ -28868,6 +28868,26 @@ a.link:hover {
   border-color: rgba(229, 231, 235, var(--tw-border-opacity));
 }
 
+.btn-bad {
+  --tw-bg-opacity: 1;
+  background-color: rgba(239, 68, 68, var(--tw-bg-opacity));
+}
+
+.btn-bad:hover {
+  --tw-bg-opacity: 1;
+  background-color: rgba(220, 38, 38, var(--tw-bg-opacity));
+}
+
+.btn-good {
+  --tw-bg-opacity: 1;
+  background-color: rgba(34, 197, 94, var(--tw-bg-opacity));
+}
+
+.btn-good:hover {
+  --tw-bg-opacity: 1;
+  background-color: rgba(22, 163, 74, var(--tw-bg-opacity));
+}
+
 .btn-primary {
   --tw-bg-opacity: 1;
   background-color: rgba(229, 231, 235, var(--tw-bg-opacity));
@@ -28908,6 +28928,10 @@ a.link:hover {
 
 :focus-visible {
   outline-width: 0;
+}
+
+input, select, textarea {
+  width: 100%;
 }
 
 input, select, textarea {

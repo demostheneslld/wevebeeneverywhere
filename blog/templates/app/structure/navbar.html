@@ -1,52 +1,30 @@
 {% load static %}
 <div>
-    <div class="flex justify-between items-center gap-x-4 p-4 sticky top-0">
+    <div class="flex justify-center md:justify-between items-center gap-x-4 p-4 w-full sticky top-0">
         <!-- Left Side Navbar -->
         <div class="flex gap-x-4 items-center">
-            <!-- Logo -->`
-            <a class='flex items-center justify-center' href="/"><img src="{% static 'app/images/WBEArrow.svg' %}" class='h-12 mr-4'/></a>
+            <!-- Logo -->
+            <div class='flex items-center justify-center'>
+                <a 
+                    class=''
+                    href="/"
+                >
+                    <img src="{% static 'app/images/WBEArrow.svg' %}" class='h-12 mr-4'/>
+                </a>
+            </div>
             <!-- Large Screen Navigation -->
             <div class='hidden md:flex gap-x-2'>
-                <a class='btn btn-white' href="{% url 'map' %}">Map</a>
-                <a class='btn btn-white' href="{% url 'stories' %}">Stories</a>
-                <a class='btn btn-white' href="/stories?id=21">About</a>
-                <a class='btn btn-white' href="{% url 'contact' %}">Contact</a>
+                {% include 'app/structure/navlinks.html' %}
             </div>
         </div>
         <!-- Right Side Navbar -->
-        <div>
-            <!-- Authenticated -->
-            {% if user.is_authenticated %}
-                <form class='flex gap-x-2 items-center' id="logoutForm" action="/accounts/logout/" method="post" class="">
-                    {% csrf_token %}
-                    <!-- Greeting and Link to Admin if Admin -->
-                    <a class='btn btn-white' href='
-                    {% if perms.permission.change_permission %}
-                        /admin' target='_blank'
-                    {% else %}
-                        /'
-                    {% endif %}
-                    >
-                        {{ user.profile.greeting }} {{ request.user.first_name }}!
-                    </a>
-                    <!-- Modify Posts Link if Permission -->
-                    {% if perms.blog_post.change_blog_post %}
-                    <a class='btn btn-white' href="{% url 'manage_blog_post_list' %}">Manage Posts</a>
-                    {% endif %}
-                    <!-- Logout -->
-                    <a class='btn btn-white' href="javascript:document.getElementById('logoutForm').submit()">Log off</a>
-                </form>
-            <!-- Not Authenticated -->
-            {% else %}
-                <a class='btn-tall btn-white' href="{% url 'login' %}">Login</a>
-            {% endif %}
+        <div class='hidden md:flex'>
+            {% include 'app/structure/auth-navlinks.html' %}
         </div>
     </div>
     <!-- Small Screen Navigation -->
-    <div class='border-t border-b border-gray-200 flex md:hidden justify-center gap-x-2 p-2'>
-        <a class='btn btn-white' href="{% url 'map' %}">Map</a>
-        <a class='btn btn-white' href="{% url 'stories' %}">Stories</a>
-        <a class='btn btn-white' href="/stories?id=21">About</a>
-        <a class='btn btn-white' href="{% url 'contact' %}">Contact</a>
+    <div class='md:hidden border-t border-b border-gray-200 p-2'>
+        <div class='flex md:hidden justify-center gap-x-2 mb-2'>{% include 'app/structure/navlinks.html' %}</div>
+        <div class='flex md:hidden justify-center gap-x-2'>{% include 'app/structure/auth-navlinks.html' %}</div>
     </div>
 </div>

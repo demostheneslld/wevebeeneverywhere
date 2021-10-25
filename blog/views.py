@@ -40,19 +40,26 @@ def action(request):
         newlike = post_interactions(
             user_id=current_user,
             post_id=getposts(request, post_id=target)[0],
-            request_type=request_type)
+            type=request_type)
         newlike.save()
         return redirect('/stories?id=' + target)
-    if type == "comment":
+    elif request_type == "comment":
         comment = post_interactions(
             user_id=request.user,
             post_id=getposts(request, post_id=target)[0],
             content=details,
-            request_type=request_type)
+            type=request_type)
         comment.save()
         return redirect('/stories?id=' + target)
+    elif request_type == "deletecomment":
+        comment = post_interactions(
+            id=target,
+            content=details,
+            type='comment')
+        comment.delete()
+        return redirect('/stories?id=' + details)
     else:
-        pass
+        raise Exception('Unknown Request Type')
 
 # PAGE VIEWS
 def home(request):
@@ -138,6 +145,7 @@ def stories(request):
             'year' : datetime.now().year,
             'post_list' : post_list,
             'posts' : posts_with_liked,
+            'current_user': request.user,
         }
     )
 

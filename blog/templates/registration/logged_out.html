@@ -1,9 +1,10 @@
 {% extends 'app/structure/layout.html' %}
-
 {% block content %}
-<div class="body-content">
-    <h2>You are logged out</h2> 
+
+<div class="content-padded">
+    <h1>You are logged out</h2> 
     <p>Have a nice day!</p>
-    <a href="{% url 'login'%}">Click here to login again.</a>
+    <a class='link' href="{% url 'login'%}">Click here to login again.</a>
 </div>
+
 {% endblock %}
