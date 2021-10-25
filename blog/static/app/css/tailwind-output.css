@@ -28981,6 +28981,36 @@ input:focus-visible, select:focus-visible, textarea:focus-visible {
   --tw-ring-color: rgba(156, 163, 175, var(--tw-ring-opacity)) !important;
 }
 
+/* Story Styles */
+
+.img_caption {
+  border-radius: 0.25rem;
+  --tw-bg-opacity: 1;
+  background-color: rgba(255, 255, 255, var(--tw-bg-opacity));
+  text-align: center;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  text-transform: uppercase;
+  margin-bottom: 0.25rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  padding-top: 0.25rem;
+  padding-bottom: 0.25rem;
+}
+
+.img_holder {
+  margin-bottom: 1rem;
+  border-radius: 0.25rem;
+  padding: 0.25rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  --tw-bg-opacity: 1;
+  background-color: rgba(209, 213, 219, var(--tw-bg-opacity));
+}
+
 /* Ag Grid */
 
 .ag-theme-alpine .ag-header-viewport {
