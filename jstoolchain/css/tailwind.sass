@@ -65,3 +65,57 @@ a.link {
     @apply bg-accent-600 text-gray-50;
     @apply hover:bg-accent-700;
 }
+
+/* Inputs and Forms */
+:focus-visible {
+    outline-width: 0;
+}
+
+input,
+select,
+textarea {
+    @apply px-4 py-2 rounded;
+    @apply border border-gray-200;
+    @apply focus:ring-1 focus:ring-gray-400 focus-visible:ring-1 focus-visible:ring-gray-400 !important;
+}
+
+/* Ag Grid */
+.ag-theme-alpine .ag-header-viewport {
+    @apply bg-gray-300;
+}
+
+.ag-theme-alpine .ag-header-cell {
+    @apply pl-1 pr-2 !important;
+    @apply bg-gray-300;
+}
+
+.ag-theme-alpine .ag-header-cell:hover {
+    @apply bg-gray-400;
+}
+
+.ag-theme-alpine .ag-header-cell-text {
+    @apply w-full;
+    @apply text-center;
+    @apply m-auto;
+}
+
+.ag-theme-alpine .ag-row {
+    @apply border-none;
+}
+
+.ag-theme-alpine .ag-header-cell-resize:after {
+    @apply bg-gray-400 !important;
+}
+
+.ag-theme-alpine .ag-row.ag-row-level-0.ag-row-odd {
+    @apply bg-gray-100;
+}
+
+.ag-theme-alpine .ag-ltr .ag-cell {
+    @apply px-2;
+    @apply border-none;
+}
+
+.ag-theme-alpine .ag-row-level-0.ag-row:hover {
+    @apply bg-accent-100;
+}

@@ -20,25 +20,5 @@
     <link href="https://fonts.googleapis.com/css?family=Amatic+SC" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300" rel="stylesheet">
     <!-- JS -->
-    <script src="{% static 'app/scripts/custom_helpers.js' %}"></script>
-    <script>
-        window.addEventListener("load", function(){
-            window.cookieconsent.initialise({
-                "palette": {
-                "popup": {
-                    "background": "#efefef",
-                    "text": "#404040"
-                },
-                "button": {
-                    "background": "black",
-                    "text": "white"
-                }
-                },
-                "theme": "edgeless",
-                "content": {
-                    "message": "Hi there! We use cookies to make this site better :)"
-                }
-            });
-        });
-    </script>
+    <script src="{% static 'app/scripts/custom_helpers.js' %}?css={% now 'U' %}"></script>
 </head>
