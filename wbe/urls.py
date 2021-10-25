@@ -32,7 +32,7 @@ urlpatterns = [
     # Public Access:
     url(r'^$', blog.views.home, name='home'),
     url(r'^contact$', blog.views.contact, name='contact'),
-    url(r'^map$', blog.views.map, name='map'),
+    url(r'^map$', blog.views.travel_map, name='map'),
     url(r'^sitemap$', blog.views.sitemap, name='sitemap'),
     url(r'^stories$', blog.views.stories, name='stories'),
     url(r'^storyfinder$', blog.views.storyfinder, name='storyfinder'),

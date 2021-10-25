@@ -10,31 +10,24 @@ from blog.models import blog_post
 from blog.models import post_interactions
 from blog.forms import BlogPostForm
 from blog.forms import BlogPostFilterForm
+import environment
 
 # HELPER FUNCTIONS
-def getposts(request, topx=None, sort='-publish_date', id='all', author='all', PublishedOnly=True):
+def getposts(request, topx=None, sort='-publish_date', post_id='all', author='all', published_only=True):
     posts = blog_post.objects.all().order_by(sort).defer('content')
 
-    if str(id) != 'all':
-        posts = posts.filter(id=id)
+    if str(post_id) != 'all':
+        posts = posts.filter(id=post_id)
 
     if str(author) != 'all':
         posts = posts.filter(author=author)
 
-    if (PublishedOnly):
+    if published_only:
         posts = posts.filter(publish_date__lte=datetime.now())
-    
+
     if isinstance(topx, int):
         posts = posts[:topx]
     return posts
-
-def get_client_ip(request):
-    x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
-    if x_forwarded_for:
-        ip = x_forwarded_for.split(',')[0]
-    else:
-        ip = request.META.get('REMOTE_ADDR')
-    return ip
 
 def action(request):
     request_type = request.GET.get('type', '')
@@ -44,16 +37,16 @@ def action(request):
     if request.user.is_authenticated:
         current_user = request.user
     if request_type == "like":
-        newlike = post_interactions( 
+        newlike = post_interactions(
             user_id=current_user,
-            post_id=getposts(request, id=target)[0],
+            post_id=getposts(request, post_id=target)[0],
             request_type=request_type)
         newlike.save()
         return redirect('/stories?id=' + target)
     if type == "comment":
         comment = post_interactions(
             user_id=request.user,
-            post_id=getposts(request, id=target)[0],
+            post_id=getposts(request, post_id=target)[0],
             content=details,
             request_type=request_type)
         comment.save()
@@ -78,7 +71,7 @@ def home(request):
         }
     )
 
-def map(request):
+def travel_map(request):
     assert isinstance(request, HttpRequest)
     posts = getposts(request, sort='publish_date')
     return render(
@@ -91,42 +84,46 @@ def map(request):
             'og_image': 'http://i.imgur.com/wISv7LI.png',
             'year':datetime.now().year,
             'posts':posts,
+            'google_maps_api_key': environment.GOOGLE_MAPS_API_KEY,
         }
     )
 
 def stories(request):
     assert isinstance(request, HttpRequest)
     # page basics
-    id = request.GET.get('id','all')
+    post_id = request.GET.get('id', 'all')
     topx = request.GET.get('topx', 15)
     title = 'Stories'
-    description = 'Chronicling the adventures of Molly and Nathan as we venture across the world.' 
+    description = 'Chronicling the adventures of Molly and Nathan as we venture across the world.'
     og_type = 'website'
-    post_list = getposts(request, topx = topx)
+    post_list = getposts(request, topx=topx)
     og_image = 'http://i.imgur.com/wISv7LI.png'
 
     # get main post
-    if (id == 'all'):
+    if post_id == 'all':
         posts = getposts(request)[0:5]
     else:
-        posts = getposts(request, id=id)
+        posts = getposts(request, post_id=post_id)
 
     # if only one post meets criteria, optimize seo
-    if (posts.count() == 1):
-        title = posts[0].title 
+    if posts.count() == 1:
+        title = posts[0].title
         description = posts[0].subtitle
         og_type = 'article'
         try:
             og_image = posts[0].content.split('<img')[1].split('src="')[1].split('"')[0]
-        except:
+        # pylint: disable=broad-except
+        except Exception:
             pass
 
     posts_with_liked = []
 
     for post in posts:
         if request.user.is_authenticated:
-            posts_with_liked.append((post,
-            post_interactions.objects.all().filter(type='like', user_id = request.user, post_id = post.id)))
+            posts_with_liked.append((
+                post,
+                post_interactions.objects.all().filter(type='like', user_id=request.user, post_id=post.id)
+            ))
         else:
             posts_with_liked.append((post, False))
 
@@ -148,10 +145,10 @@ def storyfinder(request):
     assert isinstance(request, HttpRequest)
 
     title = 'Story Finder'
-    description = 'Chronicling the adventures of Molly and Nathan as we venture across the world.' 
+    description = 'Chronicling the adventures of Molly and Nathan as we venture across the world.'
     og_type = 'website'
     og_image = 'http://i.imgur.com/wISv7LI.png'
-    
+
     post_list = getposts(request)
     form = BlogPostFilterForm(request.GET)
     return render(
@@ -199,7 +196,7 @@ def sitemap(request):
 @permission_required('blog_post.add_blog_post')
 def manage_blog_post_list(request):
     assert isinstance(request, HttpRequest)
-    post_list = getposts(request, author=request.user, PublishedOnly=False)
+    post_list = getposts(request, author=request.user, published_only=False)
 
     return render(
         request,
@@ -211,7 +208,7 @@ def manage_blog_post_list(request):
 
 @permission_required('blog_post.add_blog_post')
 def manage_blog_post_add(request):
-    assert isinstance(request, HttpRequest)  
+    assert isinstance(request, HttpRequest)
     if request.method == "POST":
         form = BlogPostForm(request.POST)
         if form.is_valid():
@@ -221,18 +218,20 @@ def manage_blog_post_add(request):
             return redirect('manage_blog_post_change', pk=post.pk)
     else:
         form = BlogPostForm()
-    return render(request, 'app/views/manage_blog_post.html', 
-                    {
-                    'BlogPostForm': form
-                    , 'title': 'Add Post'
-                    }
-                  )
+    return render(
+        request,
+        'app/views/manage_blog_post.html',
+        {
+            'BlogPostForm': form,
+            'title': 'Add Post'
+        }
+    )
 
 @permission_required('blog_post.change_blog_post')
-def manage_blog_post_change(request, pk):
+def manage_blog_post_change(request, primary_key):
     assert isinstance(request, HttpRequest)
-    post = get_object_or_404(blog_post, pk=pk)
-    if (request.user == post.author):
+    post = get_object_or_404(blog_post, pk=primary_key)
+    if request.user == post.author:
         if request.method == "POST":
             form = BlogPostForm(request.POST, instance=post)
             if form.is_valid():
@@ -240,24 +239,25 @@ def manage_blog_post_change(request, pk):
                 post.save()
                 return redirect(manage_blog_post_list)
         else:
-            form = BlogPostForm(instance = post)
-            return render(request
-                          , 'app/views/manage_blog_post.html', 
-                            {
-                            'BlogPostForm': form
-                            , 'title': 'Edit Post: ' + post.title
-                            }
-                          )
+            form = BlogPostForm(instance=post)
+            return render(
+                request,
+                'app/views/manage_blog_post.html',
+                {
+                    'BlogPostForm': form,
+                    'title': 'Edit Post: ' + post.title
+                }
+            )
     else:
-        return redirect('manage_blog_post_list')    
+        return redirect('manage_blog_post_list')
 
 @permission_required('blog_post.delete_blog_post')
-def manage_blog_post_delete(request, pk):
+def manage_blog_post_delete(request, primary_key):
     assert isinstance(request, HttpRequest)
-    post = get_object_or_404(blog_post, pk=pk)
-    if (request.user == post.author):
+    post = get_object_or_404(blog_post, pk=primary_key)
+    if request.user == post.author:
         post.delete()
-    return redirect('manage_blog_post_list') 
+    return redirect('manage_blog_post_list')
 
 def privacy(request):
     assert isinstance(request, HttpRequest)

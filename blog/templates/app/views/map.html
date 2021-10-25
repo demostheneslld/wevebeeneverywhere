@@ -50,17 +50,29 @@
             }
 
             {% for post in posts %}
-                addmarker('{{ post.author.profile.map_icon_color }}', {{ post.lat }}, {{ post.lng }}, '{{ post.participants }}', '<h3>{{ post.title }}</h3><h4>{{ post.subtitle }}</h4><p>Author: <span style="font-weight:bold;color:{{ post.author.profile.map_icon_color }};">{{post.author.first_name}} {{post.author.last_name}}</span> <br/>Travelers: {{ post.participants }}<br />Date: {{ post.event_date }}<br />Location: {{ post.loc_name }}<br /><a href="/stories?id={{ post.id }}">Read the story!</a>');
+                addmarker(
+                    '{{ post.author.profile.map_icon_color }}', 
+                    {{ post.lat }}, 
+                    {{ post.lng }}, 
+                    '{{ post.participants }}', 
+                    `
+                        <h3>{{ post.title }}</h3>
+                        <h4>{{ post.subtitle }}</h4>
+                        <p>Written by <span style="font-weight:bold;color:{{ post.author.profile.map_icon_color }};">
+                            {{post.author.first_name}} {{post.author.last_name}}
+                        </span></p>
+                        <p>{{post.participants}} traveling to {{post.loc_name}} on {{post.event_date}}
+                        <p class='mt-2'><a class='link' href="/stories?id={{ post.id }}">Read the story!</a></p>
+                    `
+                    );
             {% endfor %}
         
         }
-        
-    <!-- {{ post.author.first_name }} -->
     </script>
     <script src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js">
     </script>
     <script async defer
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCFPqo30Xeib3nToxMs2r36JYRgVipJM24&callback=initMap">
+        src="https://maps.googleapis.com/maps/api/js?key={{google_maps_api_key}}&callback=initMap">
     </script>
         
     
