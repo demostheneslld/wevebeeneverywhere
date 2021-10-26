@@ -91,14 +91,21 @@ textarea {
 }
 
 /* Story Styles */
-.img_caption {
-    @apply bg-white rounded text-center uppercase font-mono text-sm;
-    @apply px-4 py-1 mb-1;
+.label_maker {
+    @apply rounded text-center uppercase font-mono text-xs;
+    @apply bg-black text-gray-100; 
+    @apply px-4 py-1;
 }
+
+.img_caption {
+    @apply label_maker;
+    @apply mb-1;
+}
+
 .img_holder {
     @apply p-1 mb-4 rounded;
     @apply flex flex-col justify-center items-center;
-    @apply bg-gray-300;
+    @apply bg-gray-600;
 }
 
 /* Ag Grid */

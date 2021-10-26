@@ -28983,20 +28983,39 @@ input:focus-visible, select:focus-visible, textarea:focus-visible {
 
 /* Story Styles */
 
-.img_caption {
+.label_maker {
   border-radius: 0.25rem;
-  --tw-bg-opacity: 1;
-  background-color: rgba(255, 255, 255, var(--tw-bg-opacity));
   text-align: center;
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-  font-size: 0.875rem;
-  line-height: 1.25rem;
+  font-size: 0.75rem;
+  line-height: 1rem;
   text-transform: uppercase;
-  margin-bottom: 0.25rem;
+  --tw-bg-opacity: 1;
+  background-color: rgba(0, 0, 0, var(--tw-bg-opacity));
+  --tw-text-opacity: 1;
+  color: rgba(243, 244, 246, var(--tw-text-opacity));
   padding-left: 1rem;
   padding-right: 1rem;
   padding-top: 0.25rem;
   padding-bottom: 0.25rem;
+}
+
+.img_caption {
+  border-radius: 0.25rem;
+  text-align: center;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  font-size: 0.75rem;
+  line-height: 1rem;
+  text-transform: uppercase;
+  --tw-bg-opacity: 1;
+  background-color: rgba(0, 0, 0, var(--tw-bg-opacity));
+  --tw-text-opacity: 1;
+  color: rgba(243, 244, 246, var(--tw-text-opacity));
+  padding-left: 1rem;
+  padding-right: 1rem;
+  padding-top: 0.25rem;
+  padding-bottom: 0.25rem;
+  margin-bottom: 0.25rem;
 }
 
 .img_holder {
@@ -29008,7 +29027,7 @@ input:focus-visible, select:focus-visible, textarea:focus-visible {
   align-items: center;
   justify-content: center;
   --tw-bg-opacity: 1;
-  background-color: rgba(209, 213, 219, var(--tw-bg-opacity));
+  background-color: rgba(75, 85, 99, var(--tw-bg-opacity));
 }
 
 /* Ag Grid */

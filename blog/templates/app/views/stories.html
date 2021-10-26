@@ -125,12 +125,19 @@
 
 {% endfor %}
 
-<div class='p-4 bg-primary-800 text-white'>
-    <h3 class='text-white'>Read more!</h3>
+<div class='p-4 bg-gray-900 text-gray-100'>
+    <h3 class='text-gray-100'>Read more!</h3>
     <p><a class='link' href="/storyfinder">Checkout the Story Finder</a> or one of our recent stories...</p>
-    {% for post in post_list %}
-        <p class="">{{ post.date }} >>> <a class='link'href="/stories?id={{ post.id }}">{{ post.title }}</a> - {{ post.loc_name }}</p>
-    {% endfor %}
+    <div class='flex flex-wrap gap-1 mt-4'>
+        {% for post in post_list %}
+            <div class=''>
+                <div class="label_maker"
+                    >{{ post.date }} <a class='link'href="/stories?id={{ post.id }}">{{ post.title }}</a>
+                     - {{ post.loc_name }}
+                </div>
+            </div>
+        {% endfor %}
+    </div>
 </div>
 
 <script>
