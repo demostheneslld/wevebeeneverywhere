@@ -1,0 +1,18 @@
+<!-- HEADER -->
+<!-- Requires a Post Object -->
+<div class="text-center bg-gray-200 py-8">
+  <h1 id="post_{{post.id}}_title">{{ post.title }}</h1>
+  <h3 id="post_{{post.id}}_subtitle">{{ post.subtitle }}</h3>
+  <p>
+    <span id="post_{{post.id}}_participants">{{ post.participants }}</span>
+    traveling to
+    <span id="post_{{post.id}}_loc_name">{{post.loc_name}}</span> on
+    <span id="post_{{post.id}}_event_date">{{ post.event_date }}</span>
+  </p>
+  <p>
+    Written by
+    <b style="color:{{ post.author.profile.map_icon_color }};">
+      <span id="post_{{post.id}}_author">{{post.author.first_name}} {{post.author.last_name}}</span>
+    </b>
+  </p>
+</div>

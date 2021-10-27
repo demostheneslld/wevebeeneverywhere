@@ -1,26 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"> 
+<urlset xmlns="https://www.sitemaps.org/schemas/sitemap/0.9"> 
     <url>
-        <loc>http://wevebeeneverywhere.com</loc> 
+        <loc>https://wevebeeneverywhere.com</loc> 
     </url>
     <url>
-        <loc>http://wevebeeneverywhere.com/stories</loc> 
+        <loc>https://wevebeeneverywhere.com/stories</loc> 
     </url>
     <url>
-        <loc>http://wevebeeneverywhere.com/map</loc> 
+        <loc>https://wevebeeneverywhere.com/map</loc> 
     </url>
     <url>
-        <loc>http://wevebeeneverywhere.com/about</loc> 
+        <loc>https://wevebeeneverywhere.com/about</loc> 
     </url>
     <url>
-        <loc>http://wevebeeneverywhere.com/contact</loc> 
+        <loc>https://wevebeeneverywhere.com/contact</loc> 
     </url>
-
-{% for post in post_list %}
-
-  <url>
-    <loc>http://wevebeeneverywhere.com/stories?id={{ post.id }}</loc> 
-  </url>
-
-{% endfor %}
+    {% for post in post_list %}
+    <url>
+        <loc>https://wevebeeneverywhere.com/stories?id={{ post.id }}</loc> 
+    </url>
+    {% endfor %}
 </urlset>

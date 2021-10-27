@@ -108,6 +108,19 @@ textarea {
     @apply bg-gray-600;
 }
 
+.post-content p {
+    text-align: justify;
+    @apply mb-4;
+}
+
+img, iframe {
+    @apply block border-none;
+}
+
+iframe {
+    @apply mb-4 rounded;
+}
+
 /* Ag Grid */
 .ag-theme-alpine .ag-header-viewport {
     @apply bg-gray-300;
@@ -147,4 +160,21 @@ textarea {
 
 .ag-theme-alpine .ag-row-level-0.ag-row:hover {
     @apply bg-accent-100;
+}
+
+/* Form Validation */ 
+.field-validation-error, .validation-summary-errors {
+    @apply text-bad-700;
+}
+
+.field-validation-valid, .validation-summary-valid {
+    display: none;
+}
+
+input.input-validation-error {
+    @apply border border-bad-700;
+}
+
+input[type="checkbox"].input-validation-error {
+    border: 0 none;
 }

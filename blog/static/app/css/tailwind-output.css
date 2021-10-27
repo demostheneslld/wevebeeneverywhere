@@ -29030,6 +29030,21 @@ input:focus-visible, select:focus-visible, textarea:focus-visible {
   background-color: rgba(75, 85, 99, var(--tw-bg-opacity));
 }
 
+.post-content p {
+  text-align: justify;
+  margin-bottom: 1rem;
+}
+
+img, iframe {
+  display: block;
+  border-style: none;
+}
+
+iframe {
+  margin-bottom: 1rem;
+  border-radius: 0.25rem;
+}
+
 /* Ag Grid */
 
 .ag-theme-alpine .ag-header-viewport {
@@ -29078,6 +29093,27 @@ input:focus-visible, select:focus-visible, textarea:focus-visible {
 .ag-theme-alpine .ag-row-level-0.ag-row:hover {
   --tw-bg-opacity: 1;
   background-color: rgba(219, 234, 254, var(--tw-bg-opacity));
+}
+
+/* Form Validation */
+
+.field-validation-error, .validation-summary-errors {
+  --tw-text-opacity: 1;
+  color: rgba(185, 28, 28, var(--tw-text-opacity));
+}
+
+.field-validation-valid, .validation-summary-valid {
+  display: none;
+}
+
+input.input-validation-error {
+  border-width: 1px;
+  --tw-border-opacity: 1;
+  border-color: rgba(185, 28, 28, var(--tw-border-opacity));
+}
+
+input[type="checkbox"].input-validation-error {
+  border: 0 none;
 }
 
 @media (min-width: 640px) {

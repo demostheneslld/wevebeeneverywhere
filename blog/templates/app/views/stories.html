@@ -1,128 +1,14 @@
 {% extends "app/structure/layout.html" %}
-
 {% block content %}
 
-<style>
-    .post-content > p {
-        text-align: justify;
-        margin-bottom: 15px;
-    }
-
-    img, iframe{
-       display:block;
-       border: none;
-    }
-</style>
-
 {% for post, liked in posts %}
-    <!-- HEADER -->
     <div id="story_{{ post.id }}" class="bg-gray-100">
-        <div class="text-center bg-gray-200 py-8">     
-            <h1>{{ post.title }}</h1>
-            <h3>{{ post.subtitle }}</h3>
-            <p>
-                {{ post.participants }} traveling to 
-                {{post.loc_name}}
-                on {{ post.event_date }}
-            </p>
-            <p>
-                Written by 
-                <b style="color:{{ post.author.profile.map_icon_color }};">
-                    {{post.author.first_name}} {{post.author.last_name}}
-                </b>
-            </p>
-        </div>
+        {% include 'app/partials/story-header.html' %}
         <div class="post-content w-full max-w-4xl m-auto py-4 px-2">
-            <!-- CONTENT -->
-            {{ post.content | safe }}
-            <a id="footer_{{ post.id }}" style="top:-250px;"></a>
-            <!-- FOOTER -->
-            <div class='bg-gray-300 m-auto p-4 rounded'>
-                <div class='flex flex-col sm:flex-row justify-between items-center gap-2'>
-                    <!-- LIKE BUTTON -->
-                    <div class='flex items-center gap-x-2'>
-                        <div 
-                            id="like_{{ post.id }}" 
-                            class="cursor-pointer btn-short btn-white" 
-                            onclick="like({{ post.id }})" 
-                        >
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                            </svg>
-                            <span class='ml-2' id="likeCount_{{ post.id }}">{{ post.like_count }}</span>
-                        </div>
-                        <!-- COMMENT BUTTON -->
-                        <button 
-                            id="comment_{{ post.id }}" 
-                            class="btn-short btn-white border-none" 
-                            onclick="comment({{ post.id }})"
-                        >
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-                            </svg>
-                            <span class='ml-2'>{{ post.comment_count }}</span>
-                        </button>
-                        <!-- SUBSCRIBE BUTTON -->
-                        <button class="btn-short btn-white border-none" onclick="email_sub()">Subscribe</button>
-                    </div>
-                    <!-- DIRECT LINK -->
-                    <div class='flex items-center'>
-                        <div class='bg-gray-400 px-4 py-2 rounded-l'>Direct Link</div>
-                        <div class="select-all px-4 py-2 bg-white rounded-r">wevebeeneverywhere.com/stories?id={{ post.id }}</div>
-                    </div>
-                </div>
-                <!-- Comments Section -->
-                <div class='hidden pt-4' id="comments_{{ post.id }}">
-                    <!-- If logged in show comment form -->
-                    {% if user.is_authenticated %}
-                    <form action="/action" method="get">
-                        {% csrf_token %}
-                        <input type="hidden" name="next" value="{{ request.path }}" />
-                        <input type="text" name="type" value="comment" hidden>
-                        <input type="text" name="target" value="{{ post.id }}" hidden>
-                        <textarea class='w-full' type="text" name="details" value=""></textarea>
-                        <button class="btn-short btn-white" type="submit" value="Submit">
-                            Comment as {{ request.user.first_name }} {{ request.user.last_name }}
-                        </button>
-                    </form>
-                    {% else %}
-                    {% load static %}
-                    <!-- LOGIN -->
-                    <h4>You must be signed in to comment!</h4>
-                    {% endif %}
-                    <!-- Comment History 
-                    <h4 style="margin-bottom:0px;">Comment History</h4>-->
-                    <div class='flex flex-col mt-4'>
-                        {% for comment in post.get_comments %}
-                            <div class='flex items-center justify-between hover:bg-gray-200 p-1'>
-                                <p 
-                                    class="comment flex items-center justify-center gap-x-2"
-                                    data-user="{{ comment.user_id.id }}"
-                                >
-                                    <i class='text-gray-600'>{{comment.interaction_date|date:"Y/m/d"}}</i>
-                                    <b class='text-center'>
-                                        {{ comment.user_id.first_name }} {{ comment.user_id.last_name }}
-                                    </b>
-                                    <span>{{ comment.content }}</span>
-                                </p> 
-                                {% if current_user.id == comment.user_id.id %}
-                                <a 
-                                    class="bg-bad-600 hover:bg-bad-700 p-1 rounded text-white"
-                                    href="/action?type=deletecomment&target={{ comment.id }}&details={{ post.id }}"
-                                >
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                                    </svg>
-                                </a>
-                                {% endif %}
-                            </div>
-                        {% endfor %}
-                    </div>
-                </div>
-            </div>
+            {% include 'app/partials/story-content.html' %}
+            {% include 'app/partials/story-footer.html' %}
         </div>
     </div>
-
 {% endfor %}
 
 <div class='p-4 bg-gray-900 text-gray-100'>
@@ -139,23 +25,4 @@
         {% endfor %}
     </div>
 </div>
-
-<script>
-
-    async function like(post_id) {
-        const likeButtonElement = document.getElementById(`like_${post_id}`);
-        const likeCountElement = document.getElementById(`likeCount_${post_id}`);
-        likeCountElement.innerHTML = parseInt(likeCountElement.innerHTML) + 1;
-        likeButtonElement.classList.remove("btn-white");
-        likeButtonElement.classList.add("btn-accent-dark");
-        const request = new Request(`/action?type=like&target=${post_id}`);
-        await fetch(request);
-        console.log('Like Sent')
-    }
-
-    function comment(post_id) {
-        document.getElementById(`comments_${post_id}`).classList.toggle('hidden');
-    }
-</script>
-
 {% endblock %}

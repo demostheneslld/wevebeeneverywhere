@@ -4,7 +4,7 @@
 
 <div style="padding:20px;">
     
-    <h3>Posts by {{ request.user }}. <a href="/manage/blog_post/add">Add Post</a></h3>
+    <h3>Posts by {{ request.user }}. <a class='link' href="/manage/blog_post/add">Add Post</a></h3>
     <table class="custom sortable">
         <tr>
             <th>Event Date</th>
@@ -29,10 +29,10 @@
                 {{ post.subtitle }}
             </td>
             <td>
-                <a href="/manage/blog_post/{{ post.id }}/change" >edit </a>
+                <a class='link' href="/manage/blog_post/{{ post.id }}/change" >edit </a>
             </td>
             <td>
-                <a href="/manage/blog_post/{{ post.id }}/delete" class="confirmation">delete </a>
+                <a class='link' href="/manage/blog_post/{{ post.id }}/delete" class="confirmation">delete </a>
             </td>
         </tr>
     {% endfor %}

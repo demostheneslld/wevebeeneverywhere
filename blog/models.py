@@ -38,7 +38,7 @@ class blog_post(models.Model):
     lng = models.DecimalField(max_digits=10, decimal_places=4)
     title = models.CharField(max_length=250)
     subtitle = models.CharField(max_length=400)
-    content = models.TextField(default='<p>This content must be written in HTML. See the live preview, code shortcuts above, or google for information on syntax.</p>')
+    content = models.TextField(default='<p>This content must be written in HTML. See the live preview, or google for information on syntax.</p>')
     score = models.CharField(max_length=15, choices=SCORE_CHOICES, default=4)
     def comment_count(self):
         obj_pk = self.id

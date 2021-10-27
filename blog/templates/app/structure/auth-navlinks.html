@@ -3,13 +3,12 @@
     <form class='flex gap-x-2 items-center' id="logoutForm" action="/accounts/logout/" method="post" class="">
         {% csrf_token %}
         <!-- Greeting and Link to Admin if Admin -->
-        <a class='btn btn-white' href='
+        <a class='btn btn-white' 
         {% if perms.permission.change_permission %}
-            /admin target='_blank'
+            href='/admin' target='_blank'
         {% else %}
-            /
+            href='/'
         {% endif %}
-        '
         >
             {{ user.profile.greeting }} {{ request.user.first_name }}!
         </a>

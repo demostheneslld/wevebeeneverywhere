@@ -217,6 +217,7 @@ def manage_blog_post_list(request):
 @permission_required('blog_post.add_blog_post')
 def manage_blog_post_add(request):
     assert isinstance(request, HttpRequest)
+    post_id = "newpost"
     if request.method == "POST":
         form = BlogPostForm(request.POST)
         if form.is_valid():
@@ -226,19 +227,21 @@ def manage_blog_post_add(request):
             return redirect('manage_blog_post_change', pk=post.pk)
     else:
         form = BlogPostForm()
+    print(post_id)
     return render(
         request,
         'app/views/manage_blog_post.html',
         {
             'BlogPostForm': form,
+            'post_id': post_id,
             'title': 'Add Post'
         }
     )
 
 @permission_required('blog_post.change_blog_post')
-def manage_blog_post_change(request, primary_key):
+def manage_blog_post_change(request, pk):
     assert isinstance(request, HttpRequest)
-    post = get_object_or_404(blog_post, pk=primary_key)
+    post = get_object_or_404(blog_post, pk=pk)
     if request.user == post.author:
         if request.method == "POST":
             form = BlogPostForm(request.POST, instance=post)
@@ -253,6 +256,7 @@ def manage_blog_post_change(request, primary_key):
                 'app/views/manage_blog_post.html',
                 {
                     'BlogPostForm': form,
+                    'post': post,
                     'title': 'Edit Post: ' + post.title
                 }
             )
@@ -260,13 +264,14 @@ def manage_blog_post_change(request, primary_key):
         return redirect('manage_blog_post_list')
 
 @permission_required('blog_post.delete_blog_post')
-def manage_blog_post_delete(request, primary_key):
+def manage_blog_post_delete(request, pk):
     assert isinstance(request, HttpRequest)
-    post = get_object_or_404(blog_post, pk=primary_key)
+    post = get_object_or_404(blog_post, pk=pk)
     if request.user == post.author:
         post.delete()
     return redirect('manage_blog_post_list')
 
+# STATIC VIEWS
 def privacy(request):
     assert isinstance(request, HttpRequest)
     return render(
