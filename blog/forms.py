@@ -5,8 +5,8 @@ Definition of forms.
 from django import forms
 from django.contrib.auth.forms import AuthenticationForm
 from django.utils.translation import ugettext_lazy as _
+from ckeditor.widgets import CKEditorWidget
 from blog.models import blog_post
-
 
 class BootstrapAuthenticationForm(AuthenticationForm):
     """Authentication form which uses boostrap CSS."""
@@ -50,6 +50,10 @@ class BlogPostForm(forms.ModelForm):
                 'type': 'time',
             },
         ),
+    )
+
+    content = forms.CharField(
+        widget=CKEditorWidget()
     )
 
     class Meta:

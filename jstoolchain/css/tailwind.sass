@@ -113,12 +113,26 @@ textarea {
     @apply mb-4;
 }
 
+.post-content ol {
+    @apply ml-8 mb-4;
+    list-style-type: decimal;
+}
+
+.post-content ul {
+    @apply ml-8 mb-4;
+    list-style-type: inherit;
+}
+
 img, iframe {
     @apply block border-none;
 }
 
 iframe {
     @apply mb-4 rounded;
+}
+
+.django-ckeditor-widget {
+    @apply w-full;
 }
 
 /* Ag Grid */

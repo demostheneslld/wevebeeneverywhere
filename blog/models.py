@@ -50,15 +50,15 @@ class blog_post(models.Model):
         obj_pk = self.id
         return post_interactions.objects.filter(type='comment', post_id=obj_pk).order_by('-interaction_date')
 
-class MediaItem(models.Model):
-    MEDIA_TYPES = [
-        ('1', 'picture'),
-        ('2', 'video')
-    ]
-    media_type = models.CharField(max_length=10, choices=MEDIA_TYPES, default=1)
-    title = models.CharField(max_length=250)
-    source_url = models.CharField(max_length=400)
-    content = models.TextField(default='<p>This content must be written in HTML. See the live preview, code shortcuts above, or google for information on syntax.</p>')
+# class MediaItem(models.Model):
+#     MEDIA_TYPES = [
+#         ('1', 'picture'),
+#         ('2', 'video')
+#     ]
+#     media_type = models.CharField(max_length=10, choices=MEDIA_TYPES, default=1)
+#     title = models.CharField(max_length=250)
+#     source_url = models.CharField(max_length=400)
+#     content = models.TextField(default='<p>This content must be written in HTML. See the live preview, code shortcuts above, or google for information on syntax.</p>')
 
 class post_interactions(models.Model):
     type = models.CharField(max_length=100)

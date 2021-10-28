@@ -29035,6 +29035,18 @@ input:focus-visible, select:focus-visible, textarea:focus-visible {
   margin-bottom: 1rem;
 }
 
+.post-content ol {
+  margin-bottom: 1rem;
+  margin-left: 2rem;
+  list-style-type: decimal;
+}
+
+.post-content ul {
+  margin-bottom: 1rem;
+  margin-left: 2rem;
+  list-style-type: inherit;
+}
+
 img, iframe {
   display: block;
   border-style: none;
@@ -29043,6 +29055,10 @@ img, iframe {
 iframe {
   margin-bottom: 1rem;
   border-radius: 0.25rem;
+}
+
+.django-ckeditor-widget {
+  width: 100%;
 }
 
 /* Ag Grid */

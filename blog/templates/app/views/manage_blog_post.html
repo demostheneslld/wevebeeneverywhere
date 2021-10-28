@@ -73,8 +73,18 @@
 <script>
   document.addEventListener("keyup", generate_preview);
 
+  CKEDITOR.on('instanceCreated', function(event) {
+    var editor = event.editor,
+    element = editor.element;
+    editor.on('change', function() {
+      generate_preview();
+    });
+  });
+
   function generate_preview(e) {
     const post_id = "{{post.id}}";
+    console.log(`Generating Preview for Post ID: ${post_id}`);
+    
     const previewFields = [
       "title",
       "subtitle",
@@ -83,15 +93,21 @@
       "loc_name",
       "content",
     ];
-    console.log(`Generating Preview for Post ID: ${post_id}`);
 
     for (const previewField of previewFields) {
+      let formValue;
       // Get value from form
-      const formValue = document.getElementById(`id_${previewField}`).value;
+      if (previewField != 'content') {
+        formValue = document.getElementById(`id_${previewField}`).value;
+      }
+      // Content has to be handled separately due to rich text editor 
+      else {
+        formValue = CKEDITOR.instances.id_content.getData();
+      }
+      // Set value in preview
       console.log(
         `[${previewField}] form value is:\n"${formValue.substring(0, 50)}"`
       );
-      // Set value in preview
       const previewElement = document.getElementById(
         `post_${post_id}_${previewField}`
       );
