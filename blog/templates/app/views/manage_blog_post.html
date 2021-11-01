@@ -30,10 +30,11 @@
   <div class="flex gap-x-4">
     <!-- Post Form -->
     <form
+      id='post_form'
       class="
         w-72
         md:w-1/2
-        max-w-xl
+        max-w-2xl
         bg-gray-100
         p-2
         md:p-4
@@ -55,7 +56,7 @@
       <button class="btn-short btn-accent-dark" type="submit">Submit</button>
     </form>
     <!-- Post Preview -->
-    <div class="flex flex-col w-full bg-gray-100 gap-y-2 p-2 md:p-4 rounded">
+    <div id='post_preview' class="flex flex-col w-full bg-gray-100 gap-y-2 p-2 md:p-4 rounded">
       <h2>Post Preview</h2>
       <div id="preview">
         {% include 'app/partials/story-header.html' %}
@@ -73,12 +74,25 @@
 <script>
   document.addEventListener("keyup", generate_preview);
 
+  CKEDITOR.on('load', function(event) {
+    const editor = event.editor;
+    editor.addCss(`
+      .img_caption {
+        background-color: black;
+      }
+    `);
+  });
+
   CKEDITOR.on('instanceCreated', function(event) {
-    var editor = event.editor,
-    element = editor.element;
-    editor.on('change', function() {
-      generate_preview();
-    });
+    const editor = event.editor;
+    editor.config.contentsCss = [ '/static/app/css/tailwind-output.css' ];
+
+
+    editor.config.extraAllowedContent = 'div(img_holder,img_caption); img[*]{*}; iframe[*]{*};';
+    // editor.config.extraAllowedContent = 'div[class], img[class,src], iframe[width,height,src,frameborder,allow,allowfullscreen]';
+    runCallbackOnCkeditorChanges(editor, generate_preview);
+    addInsertImageButtonToCkeditor(editor);
+    addInsertVideoButtonToCkeditor(editor);
   });
 
   function generate_preview(e) {
@@ -105,13 +119,9 @@
         formValue = CKEDITOR.instances.id_content.getData();
       }
       // Set value in preview
-      console.log(
-        `[${previewField}] form value is:\n"${formValue.substring(0, 50)}"`
-      );
       const previewElement = document.getElementById(
         `post_${post_id}_${previewField}`
       );
-      console.log(previewElement);
       previewElement.innerHTML = formValue;
     }
   }
