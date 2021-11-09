@@ -4,7 +4,7 @@
 {% for post, liked in posts %}
     <div id="story_{{ post.id }}" class="bg-gray-100">
         {% include 'app/partials/story-header.html' %}
-        <div class="post-content w-full max-w-4xl m-auto py-4 px-2">
+        <div class="post-content">
             {% include 'app/partials/story-content.html' %}
             {% include 'app/partials/story-footer.html' %}
         </div>

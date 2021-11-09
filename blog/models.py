@@ -27,7 +27,7 @@ def save_user_profile(sender, instance, **kwargs):
     instance.profile.save()
 
 # BLOG RELATED
-class blog_post(models.Model):
+class BlogPost(models.Model):
     SCORE_CHOICES = [('1', 'Terrible!'), ('2', 'Meh'), ('3', 'Okay'), ('4', 'Good'), ('5', 'Great!'), ('6', 'AMAZING'), ('7', 'All Time Favorite')]
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     event_date = models.DateField(default=timezone.now)
@@ -42,27 +42,34 @@ class blog_post(models.Model):
     score = models.CharField(max_length=15, choices=SCORE_CHOICES, default=4)
     def comment_count(self):
         obj_pk = self.id
-        return post_interactions.objects.filter(type='comment', post_id=obj_pk).count()
+        return PostInteraction.objects.filter(type='comment', post_id=obj_pk).count()
     def like_count(self):
         obj_pk = self.id
-        return post_interactions.objects.filter(type='like', post_id=obj_pk).count()
+        return PostInteraction.objects.filter(type='like', post_id=obj_pk).count()
     def get_comments(self):
         obj_pk = self.id
-        return post_interactions.objects.filter(type='comment', post_id=obj_pk).order_by('-interaction_date')
+        return PostInteraction.objects.filter(type='comment', post_id=obj_pk).order_by('-interaction_date')
 
-# class MediaItem(models.Model):
-#     MEDIA_TYPES = [
-#         ('1', 'picture'),
-#         ('2', 'video')
-#     ]
-#     media_type = models.CharField(max_length=10, choices=MEDIA_TYPES, default=1)
-#     title = models.CharField(max_length=250)
-#     source_url = models.CharField(max_length=400)
-#     content = models.TextField(default='<p>This content must be written in HTML. See the live preview, code shortcuts above, or google for information on syntax.</p>')
-
-class post_interactions(models.Model):
+class MediaItem(models.Model):
+    MEDIA_TYPES = [
+        ('1', 'picture'),
+        ('2', 'video')
+    ]
+    ALLOWED_FILE_EXTENSIONS = [
+        ('1', 'png'),
+        ('2', 'jpg'),
+        ('3', 'jpeg'),
+    ]
+    media_type = models.CharField(max_length=10, choices=MEDIA_TYPES, default=1)
+    caption = models.CharField(max_length=250)
+    file_name = models.UUIDField()
+    file_extension = models.CharField(max_length=10, choices=ALLOWED_FILE_EXTENSIONS, default=1)
+    source_url = models.CharField(max_length=400)
+    source_image_file = models.ImageField(upload_to='post_uploads')
+    
+class PostInteraction(models.Model):
     type = models.CharField(max_length=100)
     user_id = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
-    post_id = models.ForeignKey(blog_post, on_delete=models.CASCADE)
+    post_id = models.ForeignKey(BlogPost, on_delete=models.CASCADE)
     interaction_date = models.DateTimeField(default=timezone.now)
     content = models.TextField()

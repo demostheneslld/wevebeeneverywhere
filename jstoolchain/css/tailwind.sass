@@ -108,6 +108,11 @@ textarea {
     @apply bg-gray-600;
 }
 
+.post-content {
+    @apply w-full max-w-4xl;
+    @apply m-auto py-4 px-2;
+}
+
 .post-content p {
     text-align: justify;
     @apply mb-4;
@@ -127,8 +132,17 @@ img, iframe {
     @apply block border-none;
 }
 
+.img {
+    @apply w-full bg-gray-300 rounded;
+    height: 60vh;
+    max-height: 400px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
 iframe {
-    @apply mb-4 rounded;
+    @apply rounded;
 }
 
 .django-ckeditor-widget {

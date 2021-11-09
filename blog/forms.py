@@ -6,7 +6,7 @@ from django import forms
 from django.contrib.auth.forms import AuthenticationForm
 from django.utils.translation import ugettext_lazy as _
 from ckeditor.widgets import CKEditorWidget
-from blog.models import blog_post
+from blog.models import BlogPost, MediaItem
 
 class BootstrapAuthenticationForm(AuthenticationForm):
     """Authentication form which uses boostrap CSS."""
@@ -57,7 +57,7 @@ class BlogPostForm(forms.ModelForm):
     )
 
     class Meta:
-        model = blog_post
+        model = BlogPost
         fields = (
             'title',
             'subtitle',
@@ -66,11 +66,22 @@ class BlogPostForm(forms.ModelForm):
             'lat',
             'lng',
             'event_date',
+            'publish_date',
             'score',
             'content',
-            'publish_date',
         )
 
+class MediaItemForm(forms.ModelForm):
+    class Meta:
+        model = MediaItem
+        fields = (
+            'media_type',
+            'caption',
+            'file_name',
+            'file_extension',
+            'source_url',
+            'source_image_file',
+        )
 
 class BlogPostFilterForm(forms.Form):
     p_min = forms.DateInput()

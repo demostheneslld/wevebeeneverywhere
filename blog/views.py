@@ -3,18 +3,34 @@ Definition of views.
 """
 
 from datetime import datetime
+from django.http import JsonResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import permission_required
 from django.http import HttpRequest
-from blog.models import blog_post
-from blog.models import post_interactions
-from blog.forms import BlogPostForm
-from blog.forms import BlogPostFilterForm
+from blog.models import BlogPost, PostInteraction
+from blog.forms import BlogPostForm, MediaItemForm
 import environment
+
+# CONSTANTS
+UPPER_BLOG_POST_FORM_FIELDS = [
+    'title',
+    'subtitle',
+    'participants',
+    'loc_name',
+    'lat',
+    'lng',
+    'score',
+    'event_date',
+    'publish_date',
+]
+
+LOWER_BLOG_POST_FORM_FIELDS = [
+    'content',
+]
 
 # HELPER FUNCTIONS
 def getposts(request, topx=None, sort='-publish_date', post_id='all', author='all', published_only=True):
-    posts = blog_post.objects.all().order_by(sort).defer('content')
+    posts = BlogPost.objects.all().order_by(sort).defer('content')
 
     if str(post_id) != 'all':
         posts = posts.filter(id=post_id)
@@ -37,14 +53,14 @@ def action(request):
     if request.user.is_authenticated:
         current_user = request.user
     if request_type == "like":
-        newlike = post_interactions(
+        newlike = PostInteraction(
             user_id=current_user,
             post_id=getposts(request, post_id=target)[0],
             type=request_type)
         newlike.save()
         return redirect('/stories?id=' + target)
     elif request_type == "comment":
-        comment = post_interactions(
+        comment = PostInteraction(
             user_id=request.user,
             post_id=getposts(request, post_id=target)[0],
             content=details,
@@ -52,7 +68,7 @@ def action(request):
         comment.save()
         return redirect('/stories?id=' + target)
     elif request_type == "deletecomment":
-        comment = post_interactions(
+        comment = PostInteraction(
             id=target,
             content=details,
             type='comment')
@@ -129,7 +145,7 @@ def stories(request):
         if request.user.is_authenticated:
             posts_with_liked.append((
                 post,
-                post_interactions.objects.all().filter(type='like', user_id=request.user, post_id=post.id)
+                PostInteraction.objects.all().filter(type='like', user_id=request.user, post_id=post.id)
             ))
         else:
             posts_with_liked.append((post, False))
@@ -217,7 +233,7 @@ def manage_blog_post_list(request):
 @permission_required('blog_post.add_blog_post')
 def manage_blog_post_add(request):
     assert isinstance(request, HttpRequest)
-    post_id = "newpost"
+    post = None
     if request.method == "POST":
         form = BlogPostForm(request.POST)
         if form.is_valid():
@@ -227,13 +243,16 @@ def manage_blog_post_add(request):
             return redirect('manage_blog_post_change', pk=post.pk)
     else:
         form = BlogPostForm()
-    print(post_id)
+        post = form.save(commit = False)
     return render(
         request,
         'app/views/manage_blog_post.html',
         {
-            'BlogPostForm': form,
-            'post_id': post_id,
+            'blog_post_form': form,
+            'media_item_form': MediaItemForm(),
+            'upper_fields': UPPER_BLOG_POST_FORM_FIELDS,
+            'lower_fields': LOWER_BLOG_POST_FORM_FIELDS,
+            'post': post,
             'title': 'Add Post'
         }
     )
@@ -241,7 +260,7 @@ def manage_blog_post_add(request):
 @permission_required('blog_post.change_blog_post')
 def manage_blog_post_change(request, pk):
     assert isinstance(request, HttpRequest)
-    post = get_object_or_404(blog_post, pk=pk)
+    post = get_object_or_404(BlogPost, pk=pk)
     if request.user == post.author:
         if request.method == "POST":
             form = BlogPostForm(request.POST, instance=post)
@@ -251,22 +270,25 @@ def manage_blog_post_change(request, pk):
                 return redirect(manage_blog_post_list)
         else:
             form = BlogPostForm(instance=post)
-            return render(
-                request,
-                'app/views/manage_blog_post.html',
-                {
-                    'BlogPostForm': form,
-                    'post': post,
-                    'title': 'Edit Post: ' + post.title
-                }
-            )
+        return render(
+            request,
+            'app/views/manage_blog_post.html',
+            {
+                'blog_post_form': form,
+                'media_item_form': MediaItemForm(),
+                'upper_fields': UPPER_BLOG_POST_FORM_FIELDS,
+                'lower_fields': LOWER_BLOG_POST_FORM_FIELDS,
+                'post': post,
+                'title': 'Edit Post: ' + post.title
+            }
+        )
     else:
         return redirect('manage_blog_post_list')
 
 @permission_required('blog_post.delete_blog_post')
 def manage_blog_post_delete(request, pk):
     assert isinstance(request, HttpRequest)
-    post = get_object_or_404(blog_post, pk=pk)
+    post = get_object_or_404(BlogPost, pk=pk)
     if request.user == post.author:
         post.delete()
     return redirect('manage_blog_post_list')

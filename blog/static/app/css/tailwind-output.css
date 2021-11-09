@@ -29030,6 +29030,16 @@ input:focus-visible, select:focus-visible, textarea:focus-visible {
   background-color: rgba(75, 85, 99, var(--tw-bg-opacity));
 }
 
+.post-content {
+  width: 100%;
+  max-width: 56rem;
+  margin: auto;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+}
+
 .post-content p {
   text-align: justify;
   margin-bottom: 1rem;
@@ -29052,8 +29062,19 @@ img, iframe {
   border-style: none;
 }
 
+.img {
+  width: 100%;
+  border-radius: 0.25rem;
+  --tw-bg-opacity: 1;
+  background-color: rgba(209, 213, 219, var(--tw-bg-opacity));
+  height: 60vh;
+  max-height: 400px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
 iframe {
-  margin-bottom: 1rem;
   border-radius: 0.25rem;
 }
 
