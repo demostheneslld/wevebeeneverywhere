@@ -121,6 +121,6 @@ dmypy.json
 # End of https://www.gitignore.io/api/django
 .env
 env/*
-lib64
+env/lib64
 staticfiles
 jstoolchain/node_modules
