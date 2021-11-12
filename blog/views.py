@@ -8,7 +8,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import permission_required
 from django.http import HttpRequest
 from blog.models import BlogPost, PostInteraction
-from blog.forms import BlogPostForm, MediaItemForm
+from blog.forms import BlogPostForm, BlogPostFilterForm, MediaItemForm
 import environment
 
 # CONSTANTS
