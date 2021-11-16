@@ -30,7 +30,7 @@ function addInsertImageButtonToCkeditor(editor) {
     editor.ui.addButton('InsertCustomImage', {
         label: "Insert Image",
         command: 'insertImgCmd',
-        icon: `/static/app/images/picture-icon.svg`
+        icon: `{% static 'app/images/picture-icon.svg' %}`
     });
 }
 
@@ -57,6 +57,6 @@ function addInsertVideoButtonToCkeditor(editor) {
     editor.ui.addButton('InsertYouTubeVideo', {
         label: "Embed YouTube Video",
         command: 'insertYouTubeVideo',
-        icon: `/static/app/images/youtube.svg`
+        icon: `{%static'app/images/youtube.svg'%}`
     });
 }
