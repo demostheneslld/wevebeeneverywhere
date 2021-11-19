@@ -1,49 +1,97 @@
 {% extends "app/structure/layout.html" %}
-
 {% block content %}
 
-<div style="padding:20px;">
+<script src="https://unpkg.com/ag-grid-community/dist/ag-grid-community.min.js"></script>
+<script id="grid-data" type="application/json">
+[
+{% for post in post_list %}
+    {
+        "id": {{post.id}},
+        "event_date": "{{post.event_date|date:"Y/m/d"}}",
+        "publish_date": "{{post.publish_date|date:"Y/m/d"}}",
+        "title": "{{post.title}}",
+        "subtitle": "{{post.subtitle}}"
+    }{% if not forloop.last %},{% endif %}
+{% endfor %}
+]
+</script>
+<script>
+    const minWidth = 120;
+    const dateWidth = 125;
+    const smTextWidth = 150;
+    const mdTextWidth = 250;
+    const lgTextWidth = 450;
+
+    function actionsRenderer(params) {
+        return `
+        <div class='flex items-center justify-end gap-x-2 h-full'>
+          <a class='link' title='Edit Post' href="/manage/blog_post/${params.data.id}/change">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+            </svg>
+          </a>
+          <a class='link' title='Delete Post' href="/manage/blog_post/${params.data.id}/delete" onclick="return confirm('Are you sure you want to delete this post?')">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+            </svg>
+          </a>
+        </div>
+        `;
+    };
+
+    function onFilterTextBoxChanged() {
+        gridOptions.api.setQuickFilter(document.getElementById('quick-filter-input').value);
+    };
+
+    const columnDefs = [
+        { field: "event_date", headerName: 'Event Date', width: dateWidth },
+        { field: "publish_date", headerName: 'Published', width: dateWidth },
+        { field: "title", headerName: 'Title', minWidth: mdTextWidth},
+        { field: "subtitle", headerName: 'Subtitle', width: lgTextWidth },
+        { field: "id", headerName: 'Actions', cellRenderer: actionsRenderer, filter: false, sortable: false, width: 80 },
+
+    ];
+
+// specify the data
+const rowText = document.getElementById('grid-data').textContent;
+const rowData = JSON.parse(rowText);
+console.log(rowData);
+
+// let the grid know which columns and what data to use
+const gridOptions = {
+  columnDefs: columnDefs,
+  rowData: rowData,
+  defaultColDef: {
+    filter: true,
+    sortable: true,
+    resizable: true,
+  },
+};
+
+// setup the grid after the page has finished loading
+document.addEventListener('DOMContentLoaded', () => {
+    const gridDiv = document.querySelector('#grid');
+    new agGrid.Grid(gridDiv, gridOptions);
+});
+
+</script>
+<div>
     
-    <h3>Posts by {{ request.user }}. <a class='link' href="/manage/blog_post/add">Add Post</a></h3>
-    <table class="custom sortable">
-        <tr>
-            <th>Event Date</th>
-            <th>Published On</th>
-            <th>Title</th>
-            <th>Subtitle</th>
-            <th></th>
-            <th></th>
-        </tr>
-    {% for post in post_list %}
-        <tr>
-            <td>
-                {{post.event_date}}
-            </td>
-            <td>
-                {{post.publish_date}}
-            </td>
-            <td>
-                 {{ post.title }}
-            </td>
-            <td>
-                {{ post.subtitle }}
-            </td>
-            <td>
-                <a class='link' href="/manage/blog_post/{{ post.id }}/change" >edit </a>
-            </td>
-            <td>
-                <a class='link' href="/manage/blog_post/{{ post.id }}/delete" class="confirmation">delete </a>
-            </td>
-        </tr>
-    {% endfor %}
-    </table>
+    <div class='content-padded'>
+      <h3>Posts by {{ request.user }}. <a class='link' href="/manage/blog_post/add">Add Post</a></h3>
+      <p>Use the table below to manage your posts</p>
+      <p>You have posted {{ post_count }} times!</p>
+    </div>
+    <div class='p-2'>
+        <input 
+            class='w-full' 
+            placeholder='Search for Posts...' 
+            oninput='onFilterTextBoxChanged()' 
+            type='text' 
+            id='quick-filter-input'
+        />
+    </div>
+    
+    <div id="grid" style='height: 500px;' class="w-full ag-theme-alpine"></div>
 </div>
-{% endblock %}
-
-
-{% block scripts %}
-
-    {% load static %}
-<script src="{% static 'app/scripts/jquery.validate.min.js' %}"></script>
-
 {% endblock %}

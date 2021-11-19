@@ -90,7 +90,6 @@ def home(request):
             'og_type': 'website',
             'og_image': 'http://i.imgur.com/wISv7LI.png',
             'story_count': story_count,
-            'year':datetime.now().year,
         }
     )
 
@@ -105,7 +104,6 @@ def travel_map(request):
             'description' : 'Map of our adventures!',
             'og_type': 'website',
             'og_image': 'http://i.imgur.com/wISv7LI.png',
-            'year':datetime.now().year,
             'posts':posts,
             'google_maps_api_key': environment.GOOGLE_MAPS_API_KEY,
         }
@@ -158,7 +156,6 @@ def stories(request):
             'description' : description,
             'og_type': og_type,
             'og_image': og_image,
-            'year' : datetime.now().year,
             'post_list' : post_list,
             'posts' : posts_with_liked,
             'current_user': request.user,
@@ -183,7 +180,6 @@ def storyfinder(request):
             'description' : description,
             'og_type': og_type,
             'og_image': og_image,
-            'year' : datetime.now().year,
             'post_list' : post_list,
             'form' : form
         }
@@ -200,7 +196,6 @@ def contact(request):
             'description': 'Get in touch!',
             'og_type': 'website',
             'og_image': 'http://i.imgur.com/wISv7LI.png',
-            'year':datetime.now().year,
         }
     )
 
@@ -212,7 +207,6 @@ def sitemap(request):
         'app/views/sitemap.html',
         {
             'post_list' : post_list,
-            'year':datetime.now().year,
         }
     )
 
@@ -227,6 +221,7 @@ def manage_blog_post_list(request):
         'app/views/manage_blog_post_list.html',
         {
             'post_list' : post_list,
+            'post_count': len(post_list),
         }
     )
 
@@ -303,7 +298,6 @@ def privacy(request):
             'title':'Privacy',
             'og_type': 'website',
             'og_image': 'http://i.imgur.com/wISv7LI.png',
-            'year':datetime.now().year,
         }
     )
 
@@ -316,6 +310,5 @@ def terms(request):
             'title':'Terms of Service',
             'og_type': 'website',
             'og_image': 'http://i.imgur.com/wISv7LI.png',
-            'year':datetime.now().year,
         }
     )
