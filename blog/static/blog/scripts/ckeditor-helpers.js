@@ -1,18 +1,5 @@
-function runCallbackOnCkeditorChanges(editor, cb) {
-    element = editor.element;
-    editor.on('change', function() {
-        cb();
-    });
-}
-
 function configurePostEditor(editor) {
-    editor.config.contentsCss = [ '/static/app/css/tailwind-output.css' ];
-    editor.config.extraAllowedContent = 'div(img_holder,img_caption,img){*}; iframe(img)[*]{*};';
-    editor.config.extraPlugins = 'autogrow';
-    editor.config.autoGrow_minHeight = 300;
-    editor.config.autoGrow_maxHeight = 500;
-    editor.config.autoGrow_onStartup = true;
-    editor.config.bodyClass = 'post-content';
+    editor.allowedContent = 'div(img_holder,img_caption,img){*}; iframe(img)[*]{*};';
 }
 
 function addInsertImageButtonToCkeditor(editor) {

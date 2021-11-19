@@ -26,23 +26,12 @@
       <a class="link" href="/manage/blog_post">Back to post list</a>
     </ul>
   </div>
-  <form 
-    id='post_form'
-    class='flex gap-4'
-    action="./upload/image"
-    method="post"
-  >
-    {% csrf_token %}
-    {{media_item_form}}
-    <button class='btn-short btn-primary' type='submit'>Upload</button>
+  <form id="post_form" class="flex gap-4" action="./upload/image" method="post">
+    {% csrf_token %} {{media_item_form}}
+    <button class="btn-short btn-primary" type="submit">Upload</button>
   </form>
-  <form 
-    id='post_form'
-    class='flex flex-col gap-4'
-    action="."
-    method="post"
-  >
-    {% csrf_token %} 
+  <form id="post_form" class="flex flex-col gap-4" action="." method="post">
+    {% csrf_token %}
     <!-- Side by Side Holder -->
     <div class="flex gap-x-4">
       <!-- Post Form -->
@@ -60,73 +49,107 @@
         "
       >
         <h2>Form</h2>
-        {% for field in blog_post_form %}
-          {% if field.name in upper_fields %}
-            <div>
-              <div class="font-bold">{{ field.label_tag }}</div>
-              <div>{{ field }}</div>
-              <div class="field-validation-error">{{ field.errors }}</div>
-            </div>
-          {% endif %}
-        {% endfor %}
+        {% for field in blog_post_form %} {% if field.name in upper_fields %}
+        <div>
+          <div class="font-bold">{{ field.label_tag }}</div>
+          <div>{{ field }}</div>
+          <div class="field-validation-error">{{ field.errors }}</div>
+        </div>
+        {% endif %} {% endfor %}
       </div>
       <!-- Header Preview -->
-      <div id='post_preview' class="flex flex-col w-full bg-gray-100 gap-y-2 p-2 md:p-4 rounded">
+      <div
+        id="post_preview"
+        class="flex flex-col w-full bg-gray-100 gap-y-2 p-2 md:p-4 rounded"
+      >
         <h2>Preview</h2>
-        <div>
-          {% include 'app/partials/story-header.html' %}
-        </div>
+        <div>{% include 'app/partials/story-header.html' %}</div>
         <!-- Lower Fields -->
         <div>
-          {% for field in blog_post_form %}
-            {% if field.name in lower_fields %}
-              <div>
-                <div>{{ field }}</div>
-                <div class="field-validation-error">{{ field.errors }}</div>
-              </div>
-            {% endif %}
-          {% endfor %}
+          {% for field in blog_post_form %} {% if field.name in lower_fields %}
+          <div>
+            <div>{{ field }}</div>
+            <div class="field-validation-error">{{ field.errors }}</div>
+          </div>
+          {% endif %} {% endfor %}
         </div>
       </div>
     </div>
     <!-- Form Errors and Submit -->
-    <div class='flex flex-col gap-4 bg-gray-100 p-4 rounded'>
+    <div class="flex flex-col gap-4 bg-gray-100 p-4 rounded">
       {% if form.non_field_errors %}
-        <div class="validation-summary-errors">{{ form.non_field_errors }}</div>
+      <div class="validation-summary-errors">{{ form.non_field_errors }}</div>
       {% endif %}
-      <button class="btn-short btn-accent-dark" type="submit">Submit Post</button>
+      <button class="btn-short btn-accent-dark" type="submit">
+        Submit Post
+      </button>
     </div>
   </form>
 </div>
 
 <script>
   document.addEventListener("keyup", generate_preview);
-  ClassicEditor
-        .create( document.querySelector ( '#id_content' ),{
-          toolbar: [ 'heading', '|', 'fontfamily', 'bold', 'italic', 'link', 'bulletedList', 'numberedList', 'blockQuote', 'outdent', 'indent', 'upload-image' ],
-          heading: {
-            options: [
-                { model: 'paragraph', title: 'Paragraph', class: 'ck-heading_paragraph' },
-                { model: 'heading2', view: 'h2', title: 'Large Heading', class: 'ck-heading_heading2' },
-                { model: 'heading3', view: 'h3', title: 'Small Heading', class: 'ck-heading_heading3' },
-            ]
-          }
-        })
-        .catch( error => {
-            console.error( error );
-        } );
-  CKEDITOR.on('instanceCreated', function(event) {
-    const editor = event.editor;
-    configurePostEditor(editor);
-    runCallbackOnCkeditorChanges(editor, generate_preview);
-    addInsertImageButtonToCkeditor(editor);
-    addInsertVideoButtonToCkeditor(editor);
-  });
+  ClassicEditor.create(document.querySelector("#id_content"), {
+    // plugins: [ MediaEmbed ],
+    toolbar: [
+      "heading",
+      "|",
+      "fontfamily",
+      "bold",
+      "italic",
+      "link",
+      "blockQuote",
+      "outdent",
+      "indent",
+      "|",
+      "upload-image",
+      'mediaEmbed',
+      "|",
+      'sourceEditing',
+    ],
+    fontFamily: {
+      options: [
+        "default",
+        "Courier New, Courier, monospace",
+      ],
+    },
+    heading: {
+      options: [
+        {
+          model: "paragraph",
+          title: "Paragraph",
+          class: "ck-heading_paragraph",
+        },
+        {
+          model: "heading2",
+          view: "h2",
+          title: "Large Heading",
+          class: "ck-heading_heading2",
+        },
+        {
+          model: "heading3",
+          view: "h3",
+          title: "Small Heading",
+          class: "ck-heading_heading3",
+        },
+      ],
+    },
+  })
+    .catch((error) => {
+      console.error(error);
+    })
+    .then(function (event) {
+      const editor = event.editor;
+      // configurePostEditor(editor);
+      // runCallbackOnCkeditorChanges(editor, generate_preview);
+      // addInsertImageButtonToCkeditor(editor);
+      //  addInsertVideoButtonToCkeditor(editor);
+    });
 
   function generate_preview(e) {
     const post_id = "{{post.id}}";
     console.log(`Generating Preview for Post ID: ${post_id}`);
-    
+
     const previewFields = [
       "title",
       "subtitle",
@@ -138,10 +161,10 @@
     for (const previewField of previewFields) {
       let formValue;
       // Get value from form
-      if (previewField != 'content') {
+      if (previewField != "content") {
         formValue = document.getElementById(`id_${previewField}`).value;
       }
-      // Content has to be handled separately due to rich text editor 
+      // Content has to be handled separately due to rich text editor
       else {
         formValue = CKEDITOR.instances.id_content.getData();
       }
