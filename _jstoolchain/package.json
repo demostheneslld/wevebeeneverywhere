@@ -12,7 +12,7 @@
     "postcss-focus-visible": "^6.0.1"
   },
   "scripts": {
-    "build": "postcss css/tailwind.sass -o ../blog/static/app/css/tailwind-output.css",
+    "build": "postcss css/tailwind.sass -o ../blog/static/blog/css/tailwind-output.css",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
