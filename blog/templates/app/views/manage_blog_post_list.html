@@ -81,6 +81,9 @@ document.addEventListener('DOMContentLoaded', () => {
       <h3>Posts by {{ request.user }}. <a class='link' href="/manage/blog_post/add">Add Post</a></h3>
       <p>Use the table below to manage your posts</p>
       <p>You have posted {{ post_count }} times!</p>
+      {% if request.user.is_superuser %}
+        <a class='link' target='_blank' href='/manage/download_database'>Download a copy of the database</a>
+      {% endif %}
     </div>
     <div class='p-2'>
         <input 

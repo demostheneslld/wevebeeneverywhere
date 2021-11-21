@@ -6,7 +6,7 @@ cd ../
 
 # Run Python
 echo 'Activating Virtual Environment'
-source ./_env/bin/activate
+. ./setup_venv.sh
 echo 'Collecting Static Files'
 python3 manage.py collectstatic --noinput -i ckeditor
 echo 'Running Application'

@@ -51,4 +51,5 @@ urlpatterns = [
     url(r'^manage/blog_post/(?P<pk>\d+)/change/$', blog.views.manage_blog_post_change, name='manage_blog_post_change'),
     url(r'^manage/blog_post/add/$', blog.views.manage_blog_post_add, name='manage_blog_post_add'),
     url(r'^manage/blog_post/(?P<pk>\d+)/delete/$', blog.views.manage_blog_post_delete, name='manage_blog_post_delete'),
+    url(r'^manage/download_database', blog.views.download_database, name='download_database'),
 ]
