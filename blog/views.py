@@ -4,8 +4,11 @@ Definition of views.
 
 from datetime import datetime
 from django.http import JsonResponse
+from django.http.response import HttpResponse
 from django.shortcuts import render, get_object_or_404, redirect
-from django.contrib.auth.decorators import permission_required
+from django.contrib.auth.decorators import permission_required, user_passes_test
+from django.conf import settings
+from django.core.files import File
 from django.http import HttpRequest
 from blog.models import BlogPost, PostInteraction
 from blog.forms import BlogPostForm, BlogPostFilterForm, MediaItemForm
@@ -287,6 +290,15 @@ def manage_blog_post_delete(request, pk):
     if request.user == post.author:
         post.delete()
     return redirect('manage_blog_post_list')
+
+@user_passes_test(lambda u: u.is_superuser)
+def download_database(request):
+  db_path = settings.DATABASES['default']['NAME']
+  dbfile = File(open(db_path, "rb"))
+  response = HttpResponse(dbfile, content_type='application/x-sqlite3')
+  response['Content-Disposition'] = 'attachment; filename=wbe_db.sqlite3'
+  response['Content-Length'] = dbfile.size
+  return response
 
 # STATIC VIEWS
 def privacy(request):
