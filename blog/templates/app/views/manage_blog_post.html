@@ -88,9 +88,10 @@
 </div>
 
 <script>
-  document.addEventListener("keyup", generate_preview);
+  document.addEventListener("keyup", onKeyUp);
+  let editor;
   ClassicEditor.create(document.querySelector("#id_content"), {
-    // plugins: [ MediaEmbed ],
+    extraPlugins: [ MyCustomUploadAdapterPlugin ],
     toolbar: [
       "heading",
       "|",
@@ -102,11 +103,22 @@
       "outdent",
       "indent",
       "|",
-      "upload-image",
+      "uploadImage",
       'mediaEmbed',
       "|",
       'sourceEditing',
     ],
+    image: {
+      toolbar: [
+        'imageStyle:block',
+        'imageStyle:side',
+        '|',
+        'toggleImageCaption',
+        'imageTextAlternative',
+        '|',
+        'linkImage'
+      ]
+    },
     fontFamily: {
       options: [
         "default",
@@ -135,16 +147,20 @@
       ],
     },
   })
-    .catch((error) => {
-      console.error(error);
-    })
-    .then(function (event) {
-      const editor = event.editor;
-      // configurePostEditor(editor);
-      // runCallbackOnCkeditorChanges(editor, generate_preview);
-      // addInsertImageButtonToCkeditor(editor);
-      //  addInsertVideoButtonToCkeditor(editor);
-    });
+  .catch((error) => {
+    console.error(error);
+  })
+  .then(newEditor => {
+    editor = newEditor;
+    // configurePostEditor(editor);
+    // addInsertImageButtonToCkeditor(editor);
+    //  addInsertVideoButtonToCkeditor(editor);
+  });
+
+  function onKeyUp(event) {
+    generate_preview(event);
+    updateContentValue(editor);
+  }
 
   function generate_preview(e) {
     const post_id = "{{post.id}}";
@@ -174,6 +190,11 @@
       );
       previewElement.innerHTML = formValue;
     }
+  }
+
+  function updateContentValue(editor) {
+    const data = editor.getData();
+    const formElement = document.getElementById('id_content').value = data;
   }
 </script>
 {% endblock %}
