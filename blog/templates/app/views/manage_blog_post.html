@@ -26,10 +26,6 @@
       <a class="link" href="/manage/blog_post">Back to post list</a>
     </ul>
   </div>
-  <form id="post_form" class="flex gap-4" action="./upload/image" method="post">
-    {% csrf_token %} {{media_item_form}}
-    <button class="btn-short btn-primary" type="submit">Upload</button>
-  </form>
   <form id="post_form" class="flex flex-col gap-4" action="." method="post">
     {% csrf_token %}
     <!-- Side by Side Holder -->
@@ -89,9 +85,11 @@
 
 <script>
   document.addEventListener("keyup", onKeyUp);
+  const post_id = "{{post.id}}";
+  const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
   let editor;
   ClassicEditor.create(document.querySelector("#id_content"), {
-    extraPlugins: [ MyCustomUploadAdapterPlugin ],
+    // extraPlugins: [ MyCustomUploadAdapterPlugin ],
     toolbar: [
       "heading",
       "|",
@@ -118,6 +116,13 @@
         '|',
         'linkImage'
       ]
+    },
+    simpleUpload: {
+        // The URL that the images are uploaded to.
+        uploadUrl: `/manage/blog_post/${post_id}/upload_image/`,
+        headers: {
+          'X-CSRFToken': csrftoken,
+        }
     },
     fontFamily: {
       options: [
@@ -163,7 +168,6 @@
   }
 
   function generate_preview(e) {
-    const post_id = "{{post.id}}";
     console.log(`Generating Preview for Post ID: ${post_id}`);
 
     const previewFields = [

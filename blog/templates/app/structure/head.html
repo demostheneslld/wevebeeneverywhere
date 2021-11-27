@@ -12,16 +12,15 @@
     <meta property="og:type" content="{{ og_type }}" />
     <meta property="og:image" content="{{ og_image }}" />
     <meta property="og:description" content="{{ description }}" />
-    <!-- CSS -->
-    <link rel="stylesheet" href="{% static 'blog/css/tailwind-output.css' %}?css={% now 'U' %}">
-    <link rel="stylesheet" type="text/css" href="{% static 'blog/css/site.css'%}?css={% now 'U' %}" />
     <!-- Fonts and Icon -->
     <link rel="shortcut icon" type="image/png" href="{% static 'blog/favicon.ico' %}"/>
     <link href="https://fonts.googleapis.com/css?family=Amatic+SC" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300" rel="stylesheet">
     <!-- JS -->
-    <script src="{% static 'blog/scripts/custom-helpers.js' %}?css={% now 'U' %}"></script>
-    <script src="{% static 'blog/scripts/ckeditor-helpers.js' %}?css={% now 'U' %}"></script>
-    <script src="{% static 'blog/scripts/ckeditor-upload-adapter.js' %}"></script>
+    <script src="{% static 'blog/scripts/custom-helpers.js' %}?v={% now 'U' %}"></script>
+    <script src="{% static 'blog/scripts/ckeditor-helpers.js' %}?v={% now 'U' %}"></script>
     <script type="text/javascript" src="{% static 'blog/packages/ckeditor/build/ckeditor.js' %}"></script>
+    <!-- CSS -->
+    <link rel="stylesheet" href="{% static 'blog/css/tailwind-output.css' %}?v={% now 'U' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'blog/css/site.css'%}?v={% now 'U' %}" />
 </head>

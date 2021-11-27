@@ -2,6 +2,7 @@
 Definition of views.
 """
 
+import os, uuid
 from datetime import datetime
 from django.http import JsonResponse
 from django.http.response import HttpResponse
@@ -10,6 +11,7 @@ from django.contrib.auth.decorators import permission_required, user_passes_test
 from django.conf import settings
 from django.core.files import File
 from django.http import HttpRequest
+from azure.storage.blob import BlobServiceClient, BlobClient, ContainerClient, __version__
 from blog.models import BlogPost, PostInteraction
 from blog.forms import BlogPostForm, BlogPostFilterForm, MediaItemForm
 import environment
@@ -282,6 +284,30 @@ def manage_blog_post_change(request, pk):
         )
     else:
         return redirect('manage_blog_post_list')
+
+@permission_required('blog_post.change_blog_post')
+def manage_blog_post_upload_image(request, pk):
+  assert isinstance(request, HttpRequest)
+  if not request.method == 'POST':
+    raise Exception('Invalid HTTP Method. POST is Required')
+  post = get_object_or_404(BlogPost, pk=pk)
+  file = request.FILES['upload']
+  file_ext = file.name.split('.')[-1]
+  file_name = f'''{uuid.uuid4()}.{file_ext}'''
+  # Create a blob client using the local file name as the name for the blob
+  connect_str = environment.AZURE_STORAGE_CONNECTION_STRING
+  blob_service_client = BlobServiceClient.from_connection_string(connect_str)
+  blob_client = blob_service_client.get_blob_client(container='media', blob=file_name)
+
+  print("\nUploading to Azure Storage as blob:\n\t" + file_name)
+
+  # Upload the created file
+  with file.open() as data:
+      blob_client.upload_blob(data)
+  data = {
+    'url': f'''https://wevebeeneverywhere.blob.core.windows.net/media/{ file_name }''',
+  }
+  return JsonResponse(data)
 
 @permission_required('blog_post.delete_blog_post')
 def manage_blog_post_delete(request, pk):

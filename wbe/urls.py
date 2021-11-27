@@ -49,6 +49,7 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^manage/blog_post/$', blog.views.manage_blog_post_list, name='manage_blog_post_list'),
     url(r'^manage/blog_post/(?P<pk>\d+)/change/$', blog.views.manage_blog_post_change, name='manage_blog_post_change'),
+    url(r'^manage/blog_post/(?P<pk>\d+)/upload_image/$', blog.views.manage_blog_post_upload_image, name='manage_blog_post_upload_image'),
     url(r'^manage/blog_post/add/$', blog.views.manage_blog_post_add, name='manage_blog_post_add'),
     url(r'^manage/blog_post/(?P<pk>\d+)/delete/$', blog.views.manage_blog_post_delete, name='manage_blog_post_delete'),
     url(r'^manage/download_database', blog.views.download_database, name='download_database'),
