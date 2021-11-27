@@ -28983,6 +28983,9 @@ input:focus-visible, select:focus-visible, textarea:focus-visible {
 
 /* Story Styles */
 
+.ck-editor__editable_inline { min-height:200px; max-height:500px;
+}
+
 .label_maker {
   border-radius: 0.25rem;
   text-align: center;
@@ -29049,7 +29052,6 @@ figure.image, .ck-content figure.image {
   --tw-bg-opacity: 1;
   background-color: rgba(209, 213, 219, var(--tw-bg-opacity));
   height: 60vh;
-  max-height: 400px;
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
