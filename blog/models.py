@@ -52,14 +52,15 @@ class BlogPost(models.Model):
 
 class MediaItem(models.Model):
     MEDIA_TYPES = [
-        ('1', 'picture'),
-        ('2', 'video')
+        ('picture', 'picture'),
+        ('video', 'video')
     ]
     ALLOWED_FILE_EXTENSIONS = [
-        ('1', 'png'),
-        ('2', 'jpg'),
-        ('3', 'jpeg'),
+        ('jpg', 'png'),
+        ('png', 'jpg'),
+        ('png', 'jpeg'),
     ]
+    post_id = models.ForeignKey(BlogPost, on_delete=models.CASCADE)
     media_type = models.CharField(max_length=10, choices=MEDIA_TYPES, default=1)
     caption = models.CharField(max_length=250)
     file_name = models.UUIDField()

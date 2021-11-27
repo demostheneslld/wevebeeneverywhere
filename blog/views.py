@@ -2,7 +2,8 @@
 Definition of views.
 """
 
-import os, uuid
+import os
+import uuid
 from datetime import datetime
 from django.http import JsonResponse
 from django.http.response import HttpResponse
@@ -12,8 +13,8 @@ from django.conf import settings
 from django.core.files import File
 from django.http import HttpRequest
 from azure.storage.blob import BlobServiceClient, BlobClient, ContainerClient, __version__
-from blog.models import BlogPost, PostInteraction
-from blog.forms import BlogPostForm, BlogPostFilterForm, MediaItemForm
+from blog.models import BlogPost, MediaItem, PostInteraction
+from blog.forms import BlogPostForm, BlogPostFilterForm
 import environment
 
 # CONSTANTS
@@ -34,6 +35,8 @@ LOWER_BLOG_POST_FORM_FIELDS = [
 ]
 
 # HELPER FUNCTIONS
+
+
 def getposts(request, topx=None, sort='-publish_date', post_id='all', author='all', published_only=True):
     posts = BlogPost.objects.all().order_by(sort).defer('content')
 
@@ -49,6 +52,7 @@ def getposts(request, topx=None, sort='-publish_date', post_id='all', author='al
     if isinstance(topx, int):
         posts = posts[:topx]
     return posts
+
 
 def action(request):
     request_type = request.GET.get('type', '')
@@ -82,7 +86,9 @@ def action(request):
     else:
         raise Exception('Unknown Request Type')
 
-# PAGE VIEWS
+# PUBLIC PAGES
+
+
 def home(request):
     assert isinstance(request, HttpRequest)
     story_count = getposts(request).count()
@@ -90,13 +96,14 @@ def home(request):
         request,
         'app/views/index.html',
         {
-            'title':'Home',
+            'title': 'Home',
             'description': 'Explore everywhere with us!',
             'og_type': 'website',
             'og_image': 'http://i.imgur.com/wISv7LI.png',
             'story_count': story_count,
         }
     )
+
 
 def travel_map(request):
     assert isinstance(request, HttpRequest)
@@ -105,14 +112,15 @@ def travel_map(request):
         request,
         'app/views/map.html',
         {
-            'title':'Map',
-            'description' : 'Map of our adventures!',
+            'title': 'Map',
+            'description': 'Map of our adventures!',
             'og_type': 'website',
             'og_image': 'http://i.imgur.com/wISv7LI.png',
-            'posts':posts,
+            'posts': posts,
             'google_maps_api_key': environment.GOOGLE_MAPS_API_KEY,
         }
     )
+
 
 def stories(request):
     assert isinstance(request, HttpRequest)
@@ -137,7 +145,8 @@ def stories(request):
         description = posts[0].subtitle
         og_type = 'article'
         try:
-            og_image = posts[0].content.split('<img')[1].split('src="')[1].split('"')[0]
+            og_image = posts[0].content.split('<img')[1].split('src="')[
+                1].split('"')[0]
         # pylint: disable=broad-except
         except Exception:
             pass
@@ -148,7 +157,8 @@ def stories(request):
         if request.user.is_authenticated:
             posts_with_liked.append((
                 post,
-                PostInteraction.objects.all().filter(type='like', user_id=request.user, post_id=post.id)
+                PostInteraction.objects.all().filter(
+                    type='like', user_id=request.user, post_id=post.id)
             ))
         else:
             posts_with_liked.append((post, False))
@@ -157,15 +167,16 @@ def stories(request):
         request,
         'app/views/stories.html',
         {
-            'title' : title,
-            'description' : description,
+            'title': title,
+            'description': description,
             'og_type': og_type,
             'og_image': og_image,
-            'post_list' : post_list,
-            'posts' : posts_with_liked,
+            'post_list': post_list,
+            'posts': posts_with_liked,
             'current_user': request.user,
         }
     )
+
 
 def storyfinder(request):
     assert isinstance(request, HttpRequest)
@@ -181,28 +192,15 @@ def storyfinder(request):
         request,
         'app/views/storyfinder.html',
         {
-            'title' : title,
-            'description' : description,
+            'title': title,
+            'description': description,
             'og_type': og_type,
             'og_image': og_image,
-            'post_list' : post_list,
-            'form' : form
+            'post_list': post_list,
+            'form': form
         }
     )
 
-def contact(request):
-    assert isinstance(request, HttpRequest)
-    return render(
-        request,
-        'app/views/contact.html',
-        {
-            'title':'Contact',
-            'message':'Get in touch!',
-            'description': 'Get in touch!',
-            'og_type': 'website',
-            'og_image': 'http://i.imgur.com/wISv7LI.png',
-        }
-    )
 
 def sitemap(request):
     assert isinstance(request, HttpRequest)
@@ -211,11 +209,14 @@ def sitemap(request):
         request,
         'app/views/sitemap.html',
         {
-            'post_list' : post_list,
+            'post_list': post_list,
         }
     )
 
-# SITE MANAGEMENT
+# POST MANAGEMENT
+# Manage Post List
+
+
 @permission_required('blog_post.add_blog_post')
 def manage_blog_post_list(request):
     assert isinstance(request, HttpRequest)
@@ -225,10 +226,13 @@ def manage_blog_post_list(request):
         request,
         'app/views/manage_blog_post_list.html',
         {
-            'post_list' : post_list,
+            'post_list': post_list,
             'post_count': len(post_list),
         }
     )
+
+# Add Post
+
 
 @permission_required('blog_post.add_blog_post')
 def manage_blog_post_add(request):
@@ -243,19 +247,21 @@ def manage_blog_post_add(request):
             return redirect('manage_blog_post_change', pk=post.pk)
     else:
         form = BlogPostForm()
-        post = form.save(commit = False)
+        post = form.save(commit=False)
     return render(
         request,
         'app/views/manage_blog_post.html',
         {
             'blog_post_form': form,
-            'media_item_form': MediaItemForm(),
             'upper_fields': UPPER_BLOG_POST_FORM_FIELDS,
             'lower_fields': LOWER_BLOG_POST_FORM_FIELDS,
             'post': post,
             'title': 'Add Post'
         }
     )
+
+# Change Post
+
 
 @permission_required('blog_post.change_blog_post')
 def manage_blog_post_change(request, pk):
@@ -275,7 +281,6 @@ def manage_blog_post_change(request, pk):
             'app/views/manage_blog_post.html',
             {
                 'blog_post_form': form,
-                'media_item_form': MediaItemForm(),
                 'upper_fields': UPPER_BLOG_POST_FORM_FIELDS,
                 'lower_fields': LOWER_BLOG_POST_FORM_FIELDS,
                 'post': post,
@@ -285,29 +290,46 @@ def manage_blog_post_change(request, pk):
     else:
         return redirect('manage_blog_post_list')
 
+# Upload Image to Post
+
+
 @permission_required('blog_post.change_blog_post')
 def manage_blog_post_upload_image(request, pk):
-  assert isinstance(request, HttpRequest)
-  if not request.method == 'POST':
-    raise Exception('Invalid HTTP Method. POST is Required')
-  post = get_object_or_404(BlogPost, pk=pk)
-  file = request.FILES['upload']
-  file_ext = file.name.split('.')[-1]
-  file_name = f'''{uuid.uuid4()}.{file_ext}'''
-  # Create a blob client using the local file name as the name for the blob
-  connect_str = environment.AZURE_STORAGE_CONNECTION_STRING
-  blob_service_client = BlobServiceClient.from_connection_string(connect_str)
-  blob_client = blob_service_client.get_blob_client(container='media', blob=file_name)
+    assert isinstance(request, HttpRequest)
+    if not request.method == 'POST':
+        raise Exception('Invalid HTTP Method. POST is Required')
+    post = get_object_or_404(BlogPost, pk=pk)
+    file = request.FILES['upload']
+    file_ext = file.name.split('.')[-1]
+    file_name = f'''{uuid.uuid4()}.{file_ext}'''
+    source_url = f'''https://wevebeeneverywhere.blob.core.windows.net/media/{ file_name }'''
+    # Create a blob client using the local file name as the name for the blob
+    connect_str = environment.AZURE_STORAGE_CONNECTION_STRING
+    blob_service_client = BlobServiceClient.from_connection_string(connect_str)
+    blob_client = blob_service_client.get_blob_client(
+        container='media', blob=file_name)
 
-  print("\nUploading to Azure Storage as blob:\n\t" + file_name)
+    print("\nUploading to Azure Storage as blob:\n\t" + file_name)
 
-  # Upload the created file
-  with file.open() as data:
-      blob_client.upload_blob(data)
-  data = {
-    'url': f'''https://wevebeeneverywhere.blob.core.windows.net/media/{ file_name }''',
-  }
-  return JsonResponse(data)
+    # Upload the created file
+    with file.open() as data:
+        blob_client.upload_blob(data)
+    data = {
+        'url': source_url
+    }
+    # Save Media Item to Database
+    media_item = MediaItem()
+    media_item.post_id = post
+    media_item.media_type = 'picture'
+    media_item.caption = ''
+    media_item.file_name = file_name.replace('.' + file_ext, '')
+    media_item.file_extension = file_ext.lower()
+    media_item.source_url = source_url
+    media_item.save()
+    return JsonResponse(data)
+
+# Delete Post
+
 
 @permission_required('blog_post.delete_blog_post')
 def manage_blog_post_delete(request, pk):
@@ -317,27 +339,48 @@ def manage_blog_post_delete(request, pk):
         post.delete()
     return redirect('manage_blog_post_list')
 
+# Download Database
+
+
 @user_passes_test(lambda u: u.is_superuser)
 def download_database(request):
-  db_path = settings.DATABASES['default']['NAME']
-  dbfile = File(open(db_path, "rb"))
-  response = HttpResponse(dbfile, content_type='application/x-sqlite3')
-  response['Content-Disposition'] = 'attachment; filename=wbe_db.sqlite3'
-  response['Content-Length'] = dbfile.size
-  return response
+    db_path = settings.DATABASES['default']['NAME']
+    dbfile = File(open(db_path, "rb"))
+    response = HttpResponse(dbfile, content_type='application/x-sqlite3')
+    response['Content-Disposition'] = 'attachment; filename=wbe_db.sqlite3'
+    response['Content-Length'] = dbfile.size
+    return response
 
 # STATIC VIEWS
+
+
+def contact(request):
+    assert isinstance(request, HttpRequest)
+    return render(
+        request,
+        'app/views/contact.html',
+        {
+            'title': 'Contact',
+            'message': 'Get in touch!',
+            'description': 'Get in touch!',
+            'og_type': 'website',
+            'og_image': 'http://i.imgur.com/wISv7LI.png',
+        }
+    )
+
+
 def privacy(request):
     assert isinstance(request, HttpRequest)
     return render(
         request,
         'app/views/_privacy.html',
         {
-            'title':'Privacy',
+            'title': 'Privacy',
             'og_type': 'website',
             'og_image': 'http://i.imgur.com/wISv7LI.png',
         }
     )
+
 
 def terms(request):
     assert isinstance(request, HttpRequest)
@@ -345,7 +388,7 @@ def terms(request):
         request,
         'app/views/_terms.html',
         {
-            'title':'Terms of Service',
+            'title': 'Terms of Service',
             'og_type': 'website',
             'og_image': 'http://i.imgur.com/wISv7LI.png',
         }
