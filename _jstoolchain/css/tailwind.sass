@@ -91,6 +91,13 @@ textarea {
 }
 
 /* Story Styles */
+
+.ck-editor__editable_inline { min-height:200px; max-height:600px;}
+
+.ck.ck-editor__editable .image>figcaption.image__caption_highlighted {
+  @apply bg-black text-gray-100; 
+}
+
 .label_maker {
     @apply rounded text-center uppercase font-mono text-xs;
     @apply bg-black text-gray-100; 
@@ -113,10 +120,13 @@ figure.image, .ck-content figure.image {
   @apply flex-col-reverse;
 }
 
+.ck-content figure.image {
+  max-width: 400px;
+}
+
 .img {
   @apply w-full bg-gray-300 rounded;
   height: 60vh;
-  max-height: 400px;
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;

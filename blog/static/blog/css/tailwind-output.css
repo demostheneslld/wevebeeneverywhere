@@ -28983,6 +28983,16 @@ input:focus-visible, select:focus-visible, textarea:focus-visible {
 
 /* Story Styles */
 
+.ck-editor__editable_inline { min-height:200px; max-height:600px;
+}
+
+.ck.ck-editor__editable .image>figcaption.image__caption_highlighted {
+  --tw-bg-opacity: 1;
+  background-color: rgba(0, 0, 0, var(--tw-bg-opacity));
+  --tw-text-opacity: 1;
+  color: rgba(243, 244, 246, var(--tw-text-opacity));
+}
+
 .label_maker {
   border-radius: 0.25rem;
   text-align: center;
@@ -29043,13 +29053,16 @@ figure.image, .ck-content figure.image {
   flex-direction: column-reverse;
 }
 
+.ck-content figure.image {
+  max-width: 400px;
+}
+
 .img {
   width: 100%;
   border-radius: 0.25rem;
   --tw-bg-opacity: 1;
   background-color: rgba(209, 213, 219, var(--tw-bg-opacity));
   height: 60vh;
-  max-height: 400px;
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
