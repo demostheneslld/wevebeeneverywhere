@@ -131,7 +131,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 AZURE_ACCOUNT_NAME = 'wevebeeneverywhere'
-AZURE_ACCOUNT_KEY = environment.AZURE_STORAGE_CONNECTION_STRING
+AZURE_ACCOUNT_KEY = environment.AZURE_STORAGE_ACCESS_KEY
 AZURE_CUSTOM_DOMAIN = f'{AZURE_ACCOUNT_NAME}.blob.core.windows.net'
 AZURE_LOCATION = 'static'
 AZURE_CONTAINER = 'public'

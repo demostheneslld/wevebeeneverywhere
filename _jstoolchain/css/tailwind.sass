@@ -108,6 +108,28 @@ textarea {
     @apply bg-gray-600;
 }
 
+figure.image, .ck-content figure.image {
+  @apply img_holder;
+  @apply flex-col-reverse;
+}
+
+.img {
+  @apply w-full bg-gray-300 rounded;
+  height: 60vh;
+  max-height: 400px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+figure.image img, .ck-content figure.image img{
+  @apply rounded;
+}
+
+.image > figcaption, .ck-content .image > figcaption {
+  @apply img_caption;
+}
+
 .post-content {
     @apply w-full max-w-4xl;
     @apply m-auto py-4 px-2;
@@ -130,15 +152,6 @@ textarea {
 
 img, iframe {
     @apply block border-none;
-}
-
-.img {
-    @apply w-full bg-gray-300 rounded;
-    height: 60vh;
-    max-height: 400px;
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center;
 }
 
 iframe {
