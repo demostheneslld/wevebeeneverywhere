@@ -2,6 +2,8 @@
 Definition of views.
 """
 
+from django.contrib import messages
+from django.contrib.auth import login
 import os
 import uuid
 from datetime import datetime
@@ -14,7 +16,7 @@ from django.core.files import File
 from django.http import HttpRequest
 from azure.storage.blob import BlobServiceClient, BlobClient, ContainerClient, __version__
 from blog.models import BlogPost, MediaItem, PostInteraction
-from blog.forms import BlogPostForm, BlogPostFilterForm
+from blog.forms import BlogPostForm, BlogPostFilterForm, NewUserForm
 import environment
 
 # CONSTANTS
@@ -36,6 +38,15 @@ LOWER_BLOG_POST_FORM_FIELDS = [
 
 # HELPER FUNCTIONS
 
+def send_email(recipient, subject, body):
+    from django.core.mail import EmailMessage
+    send_email = EmailMessage(
+        subject=subject,
+        body=body,
+        from_email='no-reply@wevebeeneverywhere.com',
+        to=[recipient],
+    )
+    send_email.send(fail_silently=False)
 
 def getposts(request, topx=None, sort='-publish_date', post_id='all', author='all', published_only=True):
     posts = BlogPost.objects.all().order_by(sort).defer('content')
@@ -393,3 +404,20 @@ def terms(request):
             'og_image': 'http://i.imgur.com/wISv7LI.png',
         }
     )
+
+
+# Authentication
+
+
+def register(request):
+    if request.method == "POST":
+        form = NewUserForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            login(request, user)
+            messages.success(request, "Registration successful.")
+            return redirect("profile")
+        messages.error(
+            request, "Unsuccessful registration. Invalid information.")
+    form = NewUserForm()
+    return render(request=request, template_name="registration/register.html", context={"register_form": form})

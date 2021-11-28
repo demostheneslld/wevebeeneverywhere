@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
+from django.contrib.messages import constants as messages
 import os
 import environment
 
@@ -88,6 +89,15 @@ CKEDITOR_CONFIGS = {
     }
 }
 
+
+MESSAGE_TAGS = {
+    messages.DEBUG: 'bg-warn-200 text-warn-600 border border-warn-600 p-4',
+    messages.INFO: 'be-accent-200 text-accent-600 border border-accent-600 p-4',
+    messages.SUCCESS: 'bg-good-200 text-good-600 border border-good-600 p-4',
+    messages.WARNING: 'bg-warn-200 text-warn-600 border border-warn-600 p-4',
+    messages.ERROR: 'bg-bad-200 text-bad-600 border border-bad-600 p-4',
+}
+
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
@@ -142,3 +152,14 @@ STATIC_LOCATION = AZURE_LOCATION
 STATIC_URL = f'https://{AZURE_CUSTOM_DOMAIN}/{STATIC_LOCATION}/'
 
 STATICFILES_STORAGE = 'storages.backends.azure_storage.AzureStorage'
+
+# Email
+EMAIL_BACKEND = 'sgbackend.SendGridBackend'
+EMAIL_HOST ='smtp.sendgrid.net'
+EMAIL_HOST_USER = environment.EMAIL_HOST_USER
+EMAIL_HOST_PASSWORD = environment.EMAIL_HOST_PASSWORD
+SENDGRID_API_KEY = environment.EMAIL_HOST_PASSWORD
+DEFAULT_FROM_EMAIL = 'no-reply@wevebeeneverywhere.com'
+EMAIL_PORT = 465
+EMAIL_USE_SSL = True
+

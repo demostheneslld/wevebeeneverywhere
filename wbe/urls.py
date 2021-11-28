@@ -29,7 +29,7 @@ import blog.views
 admin.autodiscover()
 
 urlpatterns = [
-    # Public Access:
+    # Public Access
     url(r'^$', blog.views.home, name='home'),
     url(r'^contact$', blog.views.contact, name='contact'),
     url(r'^map$', blog.views.travel_map, name='map'),
@@ -39,18 +39,28 @@ urlpatterns = [
     url(r'^action$', blog.views.action, name='action'),
     url(r'^privacy$', blog.views.privacy, name='privacy'),
     url(r'^terms', blog.views.terms, name='terms'),
-    # Authentification
+
+    # Authentication
     path('accounts/', include('django.contrib.auth.urls')),
+    path("accounts/register", blog.views.register, name="register"),
 
     # Administration
     # Uncomment the admin/doc line below to enable admin documentation:
     # url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
     # Uncomment the next line to enable the admin:
     url(r'^admin/', admin.site.urls),
-    url(r'^manage/blog_post/$', blog.views.manage_blog_post_list, name='manage_blog_post_list'),
-    url(r'^manage/blog_post/(?P<pk>\d+)/change/$', blog.views.manage_blog_post_change, name='manage_blog_post_change'),
-    url(r'^manage/blog_post/(?P<pk>\d+)/upload_image/$', blog.views.manage_blog_post_upload_image, name='manage_blog_post_upload_image'),
-    url(r'^manage/blog_post/add/$', blog.views.manage_blog_post_add, name='manage_blog_post_add'),
-    url(r'^manage/blog_post/(?P<pk>\d+)/delete/$', blog.views.manage_blog_post_delete, name='manage_blog_post_delete'),
-    url(r'^manage/download_database', blog.views.download_database, name='download_database'),
+
+    # Manage Posts
+    url(r'^manage/blog_post/$', blog.views.manage_blog_post_list,
+        name='manage_blog_post_list'),
+    url(r'^manage/blog_post/(?P<pk>\d+)/change/$',
+        blog.views.manage_blog_post_change, name='manage_blog_post_change'),
+    url(r'^manage/blog_post/(?P<pk>\d+)/upload_image/$',
+        blog.views.manage_blog_post_upload_image, name='manage_blog_post_upload_image'),
+    url(r'^manage/blog_post/add/$', blog.views.manage_blog_post_add,
+        name='manage_blog_post_add'),
+    url(r'^manage/blog_post/(?P<pk>\d+)/delete/$',
+        blog.views.manage_blog_post_delete, name='manage_blog_post_delete'),
+    url(r'^manage/download_database',
+        blog.views.download_database, name='download_database'),
 ]

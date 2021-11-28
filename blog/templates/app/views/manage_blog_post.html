@@ -52,6 +52,15 @@
           <div class="field-validation-error">{{ field.errors }}</div>
         </div>
         {% endif %} {% endfor %}
+        <!-- Form Errors and Submit -->
+        <div class="flex flex-col justify-end gap-2 h-full">
+          {% if form.non_field_errors %}
+          <div class="validation-summary-errors">{{ form.non_field_errors }}</div>
+          {% endif %}
+          <button class="btn-short btn-accent-dark" type="submit">
+            Submit Post
+          </button>
+        </div>
       </div>
       <!-- Header Preview -->
       <div
@@ -70,15 +79,6 @@
           {% endif %} {% endfor %}
         </div>
       </div>
-    </div>
-    <!-- Form Errors and Submit -->
-    <div class="flex flex-col gap-4 bg-gray-100 p-4 rounded">
-      {% if form.non_field_errors %}
-      <div class="validation-summary-errors">{{ form.non_field_errors }}</div>
-      {% endif %}
-      <button class="btn-short btn-accent-dark" type="submit">
-        Submit Post
-      </button>
     </div>
   </form>
 </div>

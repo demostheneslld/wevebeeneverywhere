@@ -8,24 +8,25 @@ from django.utils.translation import ugettext_lazy as _
 from ckeditor.widgets import CKEditorWidget
 from blog.models import BlogPost, MediaItem
 
-class BootstrapAuthenticationForm(AuthenticationForm):
-    """Authentication form which uses boostrap CSS."""
-    username = forms.CharField(max_length=254,
-                               widget=forms.TextInput({
-                                   'class': 'form-control',
-                                   'placeholder': 'User name'}))
-    password = forms.CharField(label=_("Password"),
-                               widget=forms.PasswordInput({
-                                   'class': 'form-control',
-                                   'placeholder': 'Password'}))
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.models import User
 
 
-# widgets = {
-#             'event_date': forms.DateInput(),
-#             'publish_date': forms.DateTimeInput(),
-#             'subtitle': forms.Textarea(attrs={'rows': 2, 'cols': 180}),
-#             'content': forms.Textarea(attrs={'rows': 15, 'cols': 180}),
-#         }
+class NewUserForm(UserCreationForm):
+  email = forms.EmailField(required=True)
+  is_subscribed_to_emails = forms.BooleanField(required=False, label='Subscribe to Emails?', initial=False)
+
+  class Meta:
+    model = User
+    fields = ("username", "password1", "password2", "email", "is_subscribed_to_emails")
+
+  def save(self, commit=True):
+    user = super(NewUserForm, self).save(commit=False)
+    user.email = self.cleaned_data['email']
+    user.is_subscribed_to_emails = self.cleaned_data['is_subscribed_to_emails']
+    if commit:
+      user.save()
+    return user
 
 class BlogPostForm(forms.ModelForm):
     event_date = forms.DateField(
@@ -45,7 +46,7 @@ class BlogPostForm(forms.ModelForm):
                 'type': 'date',
                 'class': 'mb-1',
             },
-            #time_format=('%H:%M %p %Z'),
+            # time_format=('%H:%M %p %Z'),
             time_attrs={
                 'type': 'time',
             },

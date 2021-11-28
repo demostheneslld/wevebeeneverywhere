@@ -28945,7 +28945,7 @@ input, select, textarea {
 input, select, textarea {
   border-width: 1px;
   --tw-border-opacity: 1;
-  border-color: rgba(229, 231, 235, var(--tw-border-opacity));
+  border-color: rgba(156, 163, 175, var(--tw-border-opacity));
 }
 
 input:focus, select:focus, textarea:focus {
@@ -28968,17 +28968,17 @@ input:focus-visible, select:focus-visible, textarea:focus-visible {
 
 input:focus, select:focus, textarea:focus {
   --tw-ring-opacity: 1 !important;
-  --tw-ring-color: rgba(156, 163, 175, var(--tw-ring-opacity)) !important;
+  --tw-ring-color: rgba(59, 130, 246, var(--tw-ring-opacity)) !important;
 }
 
 input.focus-visible, select.focus-visible, textarea.focus-visible {
   --tw-ring-opacity: 1 !important;
-  --tw-ring-color: rgba(156, 163, 175, var(--tw-ring-opacity)) !important;
+  --tw-ring-color: rgba(59, 130, 246, var(--tw-ring-opacity)) !important;
 }
 
 input:focus-visible, select:focus-visible, textarea:focus-visible {
   --tw-ring-opacity: 1 !important;
-  --tw-ring-color: rgba(156, 163, 175, var(--tw-ring-opacity)) !important;
+  --tw-ring-color: rgba(59, 130, 246, var(--tw-ring-opacity)) !important;
 }
 
 /* Story Styles */

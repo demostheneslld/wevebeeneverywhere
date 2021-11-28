@@ -1,0 +1,33 @@
+{% extends 'app/structure/layout.html' %} {% load static %} {% block content %}
+
+<!--Register-->
+<div class="content-padded flex flex-col gap-y-2 max-w-lg">
+  <div>
+    <h1>Register/Subscribe</h1>
+  </div>
+  <form method="POST" class='flex flex-col gap-y-2'>
+    {% csrf_token %} {% for field in register_form %}
+    <div>
+      <span class="input-group-text" id="basic-addon1"
+        >{{ field.label_tag }}</span
+      >
+      <div
+        class="form-control"
+        placeholder="Username"
+        aria-label="Username"
+        aria-describedby="basic-addon1"
+      >
+        {{ field }}
+      </div>
+    </div>
+    <div class="text-bad-600">{{ field.errors }}</div>
+    {% endfor %} {{ form.non_field_errors }}
+    <button class="btn btn-primary" type="submit" value="login">Register</button>
+    <input type="hidden" name="next" value="{{ next }}" />
+  </form>
+  <p class="text-center">
+    If you already have an account, <a class='link' href="/accounts/login">login</a> instead.
+  </p>
+</div>
+
+{% endblock %}
