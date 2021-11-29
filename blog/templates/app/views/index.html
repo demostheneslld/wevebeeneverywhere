@@ -9,7 +9,11 @@
             <p>Join us, Nathan and Molly, as we travel the world. <b>{{ story_count }} destinations explored, and counting!</b></p>
             <div class='flex gap-x-2 mt-4'>
                 <a class="btn-short btn-accent-dark" href="/stories">Click here to read our recent stories</a>
-                <button class="btn-short btn-white" onclick="email_sub()">Subscribe to our email list</button>
+                {% if user.profile.is_subscribed_to_emails %}
+                  <button class="btn-short btn-good-dark">Subscribed to Emails!</button>
+                {% else %}
+                  <button class="btn-short btn-white" onclick="email_sub()">Subscribe to our email list</button>
+                {% endif %}
             </div>
         </div>
         <img style="width:170px; margin-top:30px;" src="{% static 'app/images/WBE.svg' %}" alt="Passport Stamp"/>

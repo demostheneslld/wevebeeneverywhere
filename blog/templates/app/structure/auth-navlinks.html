@@ -1,25 +1,34 @@
 <!-- Authenticated -->
 {% if user.is_authenticated %}
-    <form class='flex gap-x-2 items-center' id="logoutForm" action="/accounts/logout/" method="post" class="">
-        {% csrf_token %}
-        <!-- Greeting and Link to Admin if Admin -->
-        <a class='btn btn-white' 
-        {% if perms.permission.change_permission %}
-            href='/admin' target='_blank'
-        {% else %}
-            href='/'
-        {% endif %}
-        >
-            {{ user.profile.greeting }} {{ request.user.first_name }}!
-        </a>
-        <!-- Modify Posts Link if Permission -->
-        {% if perms.blog_post.change_blog_post %}
-        <a class='btn btn-white' href="{% url 'manage_blog_post_list' %}">Manage Posts</a>
-        {% endif %}
-        <!-- Logout -->
-        <a class='btn btn-white' href="javascript:document.getElementById('logoutForm').submit()">Log off</a>
-    </form>
-    <!-- Not Authenticated -->
+<form
+  class="flex gap-x-2 items-center"
+  id="logoutForm"
+  action="/accounts/logout/"
+  method="post"
+  class=""
+>
+  {% csrf_token %}
+  <!-- Greeting and Link to Admin if Admin -->
+  <a class="btn btn-white" href="/accounts/profile">
+    {{ user.profile.greeting }} {{ request.user.first_name }}!
+  </a>
+  {% if perms.permission.change_permission %}
+  <a class="btn btn-white" href="/admin" target="_blank"> Admin </a>
+  {% endif %}
+  <!-- Modify Posts Link if Permission -->
+  {% if perms.blog_post.change_blog_post %}
+  <a class="btn btn-white" href="{% url 'manage_blog_post_list' %}"
+    >Manage Posts</a
+  >
+  {% endif %}
+  <!-- Logout -->
+  <a
+    class="btn btn-white"
+    href="javascript:document.getElementById('logoutForm').submit()"
+    >Log off</a
+  >
+</form>
+<!-- Not Authenticated -->
 {% else %}
-    <a class='inline-block btn btn-white' href="{% url 'login' %}">Login</a>
+<a class="inline-block btn btn-white" href="{% url 'login' %}">Login</a>
 {% endif %}

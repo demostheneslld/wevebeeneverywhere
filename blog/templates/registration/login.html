@@ -29,8 +29,9 @@
         <button class="btn btn-primary" type="submit" value="login">Sign in</button>
         <input type="hidden" name="next" value="{{ next }}">
     </form>
-    <p>
-        <a class='link' href="{% url 'password_reset' %}">Lost password?</a>
+    <p class='flex justify-between'>
+        <a class='link' href="{% url 'password_reset' %}">Reset Password</a>
+        <a class='link' href="{% url 'register' %}">Create Account</a>
     </p>
 </div>
 {% endblock %}

@@ -26,7 +26,11 @@
                 <span class='ml-2'>{{ post.comment_count }}</span>
             </button>
             <!-- SUBSCRIBE BUTTON -->
-            <button class="btn-short btn-white border-none" onclick="email_sub()">Subscribe</button>
+            {% if user.profile.is_subscribed_to_emails %}
+              <button class="btn-short btn-good-dark border-none">Subscribed!</button>
+            {% else %}
+              <button class="btn-short btn-white border-none" onclick="email_sub()">Subscribe</button>
+            {% endif %}
         </div>
         <!-- DIRECT LINK -->
         <div class='flex items-center'>

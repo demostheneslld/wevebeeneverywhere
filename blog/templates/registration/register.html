@@ -3,7 +3,7 @@
 <!--Register-->
 <div class="content-padded flex flex-col gap-y-2 max-w-lg">
   <div>
-    <h1>Register/Subscribe</h1>
+    <h1>Register</h1>
   </div>
   <form method="POST" class='flex flex-col gap-y-2'>
     {% csrf_token %} {% for field in register_form %}
@@ -11,17 +11,13 @@
       <span class="input-group-text" id="basic-addon1"
         >{{ field.label_tag }}</span
       >
-      <div
-        class="form-control"
-        placeholder="Username"
-        aria-label="Username"
-        aria-describedby="basic-addon1"
-      >
+      <div>
         {{ field }}
       </div>
     </div>
     <div class="text-bad-600">{{ field.errors }}</div>
-    {% endfor %} {{ form.non_field_errors }}
+    {% endfor %}
+    <div class='text-bad-600'>{{ register_form.non_field_errors }}</div>
     <button class="btn btn-primary" type="submit" value="login">Register</button>
     <input type="hidden" name="next" value="{{ next }}" />
   </form>

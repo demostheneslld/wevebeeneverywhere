@@ -1,0 +1,29 @@
+{% extends 'app/structure/layout.html' %} {% load static %} {% block content %}
+
+<!--Register-->
+<div class="content-padded flex flex-col gap-y-2 max-w-lg">
+  <div>
+    <h1>Subscribe</h1>
+  </div>
+  <form method="POST" class='flex flex-col gap-y-2'>
+    {% csrf_token %} {% for field in subscribe_form %}
+      <div>
+        <span class="input-group-text" id="basic-addon1"
+          >{{ field.label_tag }}</span
+        >
+        <div>
+          {{ field }}
+        </div>
+      </div>
+      <div class="text-bad-600">{{ field.errors }}</div>
+    {% endfor %} 
+    <div class='text-bad-600'>{{ subscribe_form.non_field_errors }}</div>
+    <button class="btn btn-primary" type="submit">Subscribe</button>
+    <input type="hidden" name="next" value="{{ next }}" />
+  </form>
+  <p class="text-center">
+    If you already have an account, <a class='link' href="/accounts/profile">subscribe in your profile</a> instead.
+  </p>
+</div>
+
+{% endblock %}

@@ -43,6 +43,9 @@ urlpatterns = [
     # Authentication
     path('accounts/', include('django.contrib.auth.urls')),
     path("accounts/register", blog.views.register, name="register"),
+    path("accounts/subscribe", blog.views.subscribe, name="subscribe"),
+    path("accounts/unsubscribe", blog.views.unsubscribe, name="unsubscribe"),
+    path("accounts/profile", blog.views.profile, name="profile"),
 
     # Administration
     # Uncomment the admin/doc line below to enable admin documentation:

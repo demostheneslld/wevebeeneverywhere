@@ -1,0 +1,28 @@
+{% extends 'app/structure/layout.html' %} {% load static %} {% block content %}
+
+<!--Register-->
+<div class="content-padded flex flex-col gap-y-2 max-w-lg">
+  <div>
+    <h1>Unsubscribe</h1>
+  </div>
+  <form method="POST" class='flex flex-col gap-y-2'>
+    {% csrf_token %} {% for field in unsubscribe_form %}
+      <div>
+        <span class="input-group-text" id="basic-addon1"
+          >{{ field.label_tag }}</span
+        >
+        <div>
+          {{ field }}
+        </div>
+      </div>
+      <div class="text-bad-600">{{ field.errors }}</div>
+    {% endfor %} 
+    <div class='text-bad-600'>{{ unsubscribe_form.non_field_errors }}</div>
+    <button class="btn btn-primary" type="submit">Unsubscribe</button>
+    <input type="hidden" name="next" value="{{ next }}" />
+  </form>
+  <p class="text-center">
+    Unsubscribing means you will no longer receive emails from us, unless you request one for account management purposes.
+</div>
+
+{% endblock %}

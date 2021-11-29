@@ -28888,6 +28888,18 @@ a.link:hover {
   background-color: rgba(22, 163, 74, var(--tw-bg-opacity));
 }
 
+.btn-good-dark {
+  --tw-bg-opacity: 1;
+  background-color: rgba(21, 128, 61, var(--tw-bg-opacity));
+  --tw-text-opacity: 1;
+  color: rgba(249, 250, 251, var(--tw-text-opacity));
+}
+
+.btn-good-dark:hover {
+  --tw-bg-opacity: 1;
+  background-color: rgba(22, 101, 52, var(--tw-bg-opacity));
+}
+
 .btn-primary {
   --tw-bg-opacity: 1;
   background-color: rgba(229, 231, 235, var(--tw-bg-opacity));

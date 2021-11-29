@@ -7,16 +7,17 @@ from django.contrib.auth import login
 import os
 import uuid
 from datetime import datetime
+from django.contrib.auth.models import User
 from django.http import JsonResponse
 from django.http.response import HttpResponse
 from django.shortcuts import render, get_object_or_404, redirect
-from django.contrib.auth.decorators import permission_required, user_passes_test
+from django.contrib.auth.decorators import login_required, permission_required, user_passes_test
 from django.conf import settings
 from django.core.files import File
 from django.http import HttpRequest
 from azure.storage.blob import BlobServiceClient, BlobClient, ContainerClient, __version__
 from blog.models import BlogPost, MediaItem, PostInteraction
-from blog.forms import BlogPostForm, BlogPostFilterForm, NewUserForm
+from blog.forms import BlogPostForm, BlogPostFilterForm, ProfileForm, RegisterForm, SubscribeForm, UnsubscribeForm, UserForm
 import environment
 
 # CONSTANTS
@@ -408,16 +409,67 @@ def terms(request):
 
 # Authentication
 
-
 def register(request):
+    form = RegisterForm()
     if request.method == "POST":
-        form = NewUserForm(request.POST)
+        form = RegisterForm(request.POST)
         if form.is_valid():
             user = form.save()
             login(request, user)
-            messages.success(request, "Registration successful.")
+            messages.success(request, "Registration successful")
             return redirect("profile")
         messages.error(
-            request, "Unsuccessful registration. Invalid information.")
-    form = NewUserForm()
+            request, "Unsuccessful registration: Invalid information")
     return render(request=request, template_name="registration/register.html", context={"register_form": form})
+
+def subscribe(request):
+    form = SubscribeForm()
+    if request.method == "POST":
+        form = SubscribeForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Subscription successful")
+            return redirect("home")
+        messages.error(
+            request, "Unsuccessful subscription: Invalid information")
+    return render(request=request, template_name="registration/subscribe.html", context={"subscribe_form": form})
+
+def unsubscribe(request):
+    form = UnsubscribeForm()
+    if request.method == "POST":
+        email = request.POST.get('email')
+        user = get_object_or_404(User, email=email)
+        if user:
+          form = UnsubscribeForm(request.POST, instance=user)
+          if form.is_valid():
+              user.profile.is_subscribed_to_emails = False
+              user.save()
+              messages.success(request, "Unsubscribe successful")
+              return redirect("home")
+          messages.error(
+              request, "Unsuccessful unsubscribe: Invalid information")
+        else:
+          messages.error(request, 'Unsuccessful unsubscribe: No user exists with that email')
+    return render(request=request, template_name="registration/unsubscribe.html", context={"unsubscribe_form": form})
+
+@login_required()
+def profile(request):
+    user = request.user
+    user_form = UserForm(instance=user)
+    profile_form = ProfileForm(instance=user.profile)
+    if request.method == "POST":
+        user_form = UserForm(request.POST, instance=user)
+        profile_form = ProfileForm(request.POST, instance=user.profile)
+        if all((user_form.is_valid(), profile_form.is_valid())):
+            profile = profile_form.save()
+            user = user_form.save(commit=False)
+            user.profile = profile
+            user.save()
+            messages.success(request, "Profile update successful")
+            return redirect("home")
+        messages.error(
+            request, "Unsuccessful Profile Update: Invalid information")
+    return render(request=request, template_name="registration/profile.html", context={
+      "user_form": user_form,
+      "profile_form": profile_form
+    })

@@ -9,11 +9,13 @@ from django.utils import timezone
 
 # USER RELATED
 
+from django.contrib.auth.models import User
+User._meta.get_field('email')._unique = True
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     bio = models.TextField(max_length=500, blank=True)
-    greeting = models.TextField(max_length=30, default='Hi')
+    greeting = models.CharField(max_length=30, default='Hi')
     default_participants = models.CharField(max_length=120, blank=True)
     map_icon_color = models.CharField(max_length=40, default='red')
     is_subscribed_to_emails = models.BooleanField(default=False)
