@@ -249,28 +249,11 @@ def manage_blog_post_list(request):
 @permission_required('blog_post.add_blog_post')
 def manage_blog_post_add(request):
     assert isinstance(request, HttpRequest)
-    post = None
-    if request.method == "POST":
-        form = BlogPostForm(request.POST)
-        if form.is_valid():
-            post = form.save(commit=False)
-            post.author = request.user
-            post.save()
-            return redirect('manage_blog_post_change', pk=post.pk)
-    else:
-        form = BlogPostForm()
-        post = form.save(commit=False)
-    return render(
-        request,
-        'app/views/manage_blog_post.html',
-        {
-            'blog_post_form': form,
-            'upper_fields': UPPER_BLOG_POST_FORM_FIELDS,
-            'lower_fields': LOWER_BLOG_POST_FORM_FIELDS,
-            'post': post,
-            'title': 'Add Post'
-        }
+    post = BlogPost(
+      author=request.user
     )
+    post.save()
+    return redirect('manage_blog_post_change', pk=post.pk)
 
 # Change Post
 
@@ -296,7 +279,7 @@ def manage_blog_post_change(request, pk):
                 'upper_fields': UPPER_BLOG_POST_FORM_FIELDS,
                 'lower_fields': LOWER_BLOG_POST_FORM_FIELDS,
                 'post': post,
-                'title': 'Edit Post: ' + post.title
+                'title': 'Edit Post: ' + (post.title or 'Untitled')
             }
         )
     else:

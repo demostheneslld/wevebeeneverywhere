@@ -30,4 +30,4 @@ COPY . .
 
 EXPOSE 8000
 
-CMD /wbe/start_server.sh
+CMD /wbe/scripts/start_server.sh

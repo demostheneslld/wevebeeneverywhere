@@ -16,63 +16,69 @@ from django.core.exceptions import ValidationError
 
 class RegisterForm(UserCreationForm):
 
-  class Meta:
-    model = User
-    fields = ("email", "password1", "password2")
+    class Meta:
+        model = User
+        fields = ("email", "password1", "password2")
 
-  def save(self, commit=True):
-    user = super(RegisterForm, self).save(commit=False)
-    user.username = user.email
-    if commit:
-      user.save()
-    return user
+    def save(self, commit=True):
+        user = super(RegisterForm, self).save(commit=False)
+        user.username = user.email
+        if commit:
+            user.save()
+        return user
+
 
 class SubscribeForm(forms.ModelForm):
 
-  class Meta:
-    model = User
-    fields = ['email']
+    class Meta:
+        model = User
+        fields = ['email']
 
-  def save(self, commit=True):
-    user = super(SubscribeForm, self).save(commit=False)
-    user.username = self.cleaned_data['email']
-    user.email = self.cleaned_data['email']
-    user.is_subscribed_to_emails = True
-    if commit:
-      user.save()
-    return user
+    def save(self, commit=True):
+        user = super(SubscribeForm, self).save(commit=False)
+        user.username = self.cleaned_data['email']
+        user.email = self.cleaned_data['email']
+        user.is_subscribed_to_emails = True
+        if commit:
+            user.save()
+        return user
+
 
 class UnsubscribeForm(forms.ModelForm):
 
-  class Meta:
-    model = User
-    fields = ['email']
+    class Meta:
+        model = User
+        fields = ['email']
 
-  def save(self, commit=True):
-    email = self.cleaned_data['email']
-    user = User.objects.get(email=email)
-    user.is_subscribed_to_emails = False
-    if commit:
-      user.save()
-    return user
+    def save(self, commit=True):
+        email = self.cleaned_data['email']
+        user = User.objects.get(email=email)
+        user.is_subscribed_to_emails = False
+        if commit:
+            user.save()
+        return user
+
 
 class UserForm(forms.ModelForm):
 
-  class Meta:
-    model = User
-    fields = ['username', 'email', 'first_name', 'last_name']
+    class Meta:
+        model = User
+        fields = ['username', 'email', 'first_name', 'last_name']
+
 
 class ProfileForm(forms.ModelForm):
 
-  class Meta:
-    model = Profile
-    fields = ['bio', 'greeting', 'default_participants', 'map_icon_color', 'is_subscribed_to_emails']
-    widgets = {
-        'bio': forms.Textarea(attrs={'rows':1, 'cols':15}),
-    }
-    labels = {
-      'is_subscribed_to_emails': 'Subscribed to Emails?'
-    }
+    class Meta:
+        model = Profile
+        fields = ['bio', 'greeting', 'default_participants',
+                  'map_icon_color', 'is_subscribed_to_emails']
+        widgets = {
+            'bio': forms.Textarea(attrs={'rows': 1, 'cols': 15}),
+        }
+        labels = {
+            'is_subscribed_to_emails': 'Subscribed to Emails?'
+        }
+
 
 class BlogPostForm(forms.ModelForm):
     event_date = forms.DateField(
@@ -82,20 +88,6 @@ class BlogPostForm(forms.ModelForm):
                 'placeholder': 'Select a date',
                 'type': 'date'
             }
-        ),
-    )
-
-    publish_date = forms.SplitDateTimeField(
-        widget=forms.SplitDateTimeWidget(
-            date_format=('%Y-%m-%d'),
-            date_attrs={
-                'type': 'date',
-                'class': 'mb-1',
-            },
-            # time_format=('%H:%M %p %Z'),
-            time_attrs={
-                'type': 'time',
-            },
         ),
     )
 
@@ -113,10 +105,10 @@ class BlogPostForm(forms.ModelForm):
             'lat',
             'lng',
             'event_date',
-            'publish_date',
             'score',
             'content',
         )
+
 
 class MediaItemForm(forms.ModelForm):
     class Meta:
@@ -129,6 +121,7 @@ class MediaItemForm(forms.ModelForm):
             'source_url',
             'source_image_file',
         )
+
 
 class BlogPostFilterForm(forms.Form):
     p_min = forms.DateInput()

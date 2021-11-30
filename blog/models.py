@@ -12,6 +12,7 @@ from django.utils import timezone
 from django.contrib.auth.models import User
 User._meta.get_field('email')._unique = True
 
+
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     bio = models.TextField(max_length=500, blank=True)
@@ -41,16 +42,29 @@ class BlogPost(models.Model):
                      ('5', 'Great!'), ('6', 'AMAZING'), ('7', 'All Time Favorite')]
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     event_date = models.DateField(default=timezone.now)
-    publish_date = models.DateTimeField(default=timezone.now)
-    participants = models.CharField(max_length=400)
+    is_published = models.BooleanField(default=False)
+    publish_date = models.DateTimeField(default=None, blank=True, null=True)
+    participants = models.CharField(max_length=400, blank=True, null=True)
     loc_name = models.CharField(max_length=100, default='Name, CityOrState')
-    lat = models.DecimalField(max_digits=10, decimal_places=4)
-    lng = models.DecimalField(max_digits=10, decimal_places=4)
-    title = models.CharField(max_length=250)
-    subtitle = models.CharField(max_length=400)
-    content = models.TextField(
-        default='<p>This content must be written in HTML. See the live preview, or google for information on syntax.</p>')
-    score = models.CharField(max_length=15, choices=SCORE_CHOICES, default=4)
+    lat = models.DecimalField(
+        max_digits=10, decimal_places=4, blank=True, null=True)
+    lng = models.DecimalField(
+        max_digits=10, decimal_places=4, blank=True, null=True)
+    title = models.CharField(max_length=250, blank=True, null=True)
+    subtitle = models.CharField(max_length=400, blank=True, null=True)
+    content = models.TextField(blank=True, null=True)
+    score = models.CharField(
+        max_length=15, choices=SCORE_CHOICES, default=4, null=True)
+
+    def publish(self):
+        self.is_published = True
+        self.publish_date = timezone.now()
+        self.save()
+
+    def unpublish(self):
+        self.is_published = False
+        self.publish_date = None
+        self.save()
 
     def comment_count(self):
         obj_pk = self.id
