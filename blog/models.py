@@ -43,6 +43,7 @@ class BlogPost(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     event_date = models.DateField(default=timezone.now)
     publish_date = models.DateTimeField(default=None, blank=True, null=True)
+    email_sent = models.BooleanField(default=False)
     participants = models.CharField(max_length=400, blank=True, null=True)
     loc_name = models.CharField(max_length=100, default='Name, CityOrState')
     lat = models.DecimalField(
@@ -55,6 +56,20 @@ class BlogPost(models.Model):
     score = models.CharField(
         max_length=15, choices=SCORE_CHOICES, default=4, null=True)
 
+    def strict_validate(self):
+        errors = []
+        if not self.participants:
+            errors.append('Participants is required')
+        if not self.loc_name:
+            errors.append('Location Name is required')
+        if not self.title:
+            errors.append('Title is required')
+        if not self.subtitle:
+            errors.append('Subtitle is required')
+        if not self.content:
+            errors.append('You must write something in the post content')
+        return errors
+
     def publish(self):
         self.publish_date = timezone.now()
         self.save()
@@ -62,6 +77,9 @@ class BlogPost(models.Model):
     def unpublish(self):
         self.publish_date = None
         self.save()
+
+    def send_email(self):
+        print('Not yet implemented...')
 
     def comment_count(self):
         obj_pk = self.id

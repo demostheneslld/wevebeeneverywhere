@@ -4,7 +4,7 @@ Definition of views.
 
 from django.contrib import messages
 from django.contrib.auth import login
-import os
+from django.utils import timezone
 import uuid
 from datetime import datetime
 from django.contrib.auth.models import User
@@ -39,6 +39,7 @@ LOWER_BLOG_POST_FORM_FIELDS = [
 
 # HELPER FUNCTIONS
 
+
 def send_email(recipient, subject, body):
     from django.core.mail import EmailMessage
     send_email = EmailMessage(
@@ -48,6 +49,7 @@ def send_email(recipient, subject, body):
         to=[recipient],
     )
     send_email.send(fail_silently=False)
+
 
 def getposts(request, topx=None, sort='-publish_date', post_id='all', author='all', published_only=True):
     posts = BlogPost.objects.all().order_by(sort).defer('content')
@@ -250,7 +252,7 @@ def manage_blog_post_list(request):
 def manage_blog_post_add(request):
     assert isinstance(request, HttpRequest)
     post = BlogPost(
-      author=request.user
+        author=request.user
     )
     post.save()
     return redirect('manage_blog_post_change', pk=post.pk)
@@ -326,12 +328,41 @@ def manage_blog_post_upload_image(request, pk):
 # Delete Post
 
 
-@permission_required('blog_post.delete_blog_post')
+@permission_required('blog_post.change_blog_post')
 def manage_blog_post_delete(request, pk):
     assert isinstance(request, HttpRequest)
     post = get_object_or_404(BlogPost, pk=pk)
     if request.user == post.author:
         post.delete()
+    return redirect('manage_blog_post_list')
+
+# Email Subscribers
+
+
+@permission_required('blog_post.change_blog_post')
+def manage_blog_post_email_subscribers(request, pk):
+    assert isinstance(request, HttpRequest)
+    post = get_object_or_404(BlogPost, pk=pk)
+    if request.user == post.author:
+        post.send_email()
+        messages.warning(request, "Emailing Subscribers is not yet enabled")
+    return redirect('manage_blog_post_list')
+
+# Publish Post
+
+
+@permission_required('blog_post.change_blog_post')
+def manage_blog_post_publish(request, pk):
+    assert isinstance(request, HttpRequest)
+    post = get_object_or_404(BlogPost, pk=pk)
+    if request.user == post.author:
+        errors = post.strict_validate()
+        if len(errors) > 0:
+            messages.error(
+                request, "Unable to publish. Please correct these errors: " + ', '.join(errors))
+        else:
+            post.publish()
+            messages.success(request, "Post has been published!")
     return redirect('manage_blog_post_list')
 
 # Download Database
@@ -405,6 +436,7 @@ def register(request):
             request, "Unsuccessful registration: Invalid information")
     return render(request=request, template_name="registration/register.html", context={"register_form": form})
 
+
 def subscribe(request):
     form = SubscribeForm()
     if request.method == "POST":
@@ -417,23 +449,26 @@ def subscribe(request):
             request, "Unsuccessful subscription: Invalid information")
     return render(request=request, template_name="registration/subscribe.html", context={"subscribe_form": form})
 
+
 def unsubscribe(request):
     form = UnsubscribeForm()
     if request.method == "POST":
         email = request.POST.get('email')
         user = get_object_or_404(User, email=email)
         if user:
-          form = UnsubscribeForm(request.POST, instance=user)
-          if form.is_valid():
-              user.profile.is_subscribed_to_emails = False
-              user.save()
-              messages.success(request, "Unsubscribe successful")
-              return redirect("home")
-          messages.error(
-              request, "Unsuccessful unsubscribe: Invalid information")
+            form = UnsubscribeForm(request.POST, instance=user)
+            if form.is_valid():
+                user.profile.is_subscribed_to_emails = False
+                user.save()
+                messages.success(request, "Unsubscribe successful")
+                return redirect("home")
+            messages.error(
+                request, "Unsuccessful unsubscribe: Invalid information")
         else:
-          messages.error(request, 'Unsuccessful unsubscribe: No user exists with that email')
+            messages.error(
+                request, 'Unsuccessful unsubscribe: No user exists with that email')
     return render(request=request, template_name="registration/unsubscribe.html", context={"unsubscribe_form": form})
+
 
 @login_required()
 def profile(request):
@@ -453,6 +488,6 @@ def profile(request):
         messages.error(
             request, "Unsuccessful Profile Update: Invalid information")
     return render(request=request, template_name="registration/profile.html", context={
-      "user_form": user_form,
-      "profile_form": profile_form
+        "user_form": user_form,
+        "profile_form": profile_form
     })

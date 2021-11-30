@@ -9,6 +9,7 @@
         "id": {{post.id}},
         "event_date": "{{post.event_date|date:"Y/m/d"}}",
         "publish_date": "{{post.publish_date|date:"Y/m/d"}}",
+        "email_sent": "{{post.email_sent}}",
         "title": "{{post.title}}",
         "subtitle": "{{post.subtitle}}"
     }{% if not forloop.last %},{% endif %}
@@ -31,7 +32,7 @@
         </a>`;
         const deletePostButton = `
           <a class='link' title='Delete Post' href="/manage/blog_post/${params.data.id}/delete" onclick="return confirm('Are you sure you want to delete this post?')">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-bad-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
             </svg>
           </a>
@@ -39,11 +40,11 @@
 
         const publishPostSvg = `
           <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z" />
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
           </svg>
         `;
         const publishPostButton = params.data.publish_date ? `
-          <a class='text-gray-500'>
+          <a class='text-gray-300'>
             ${publishPostSvg}
           </a>` : `
           <a class='link' title='Publish Post' href="/manage/blog_post/${params.data.id}/publish" onclick="return confirm('Are you sure you want to publish this post?')">
@@ -56,8 +57,8 @@
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
           </svg>
         `;
-        const emailPostButton = (!params.data.publish_date || params.data.email_sent) ? `
-          <a class='text-gray-500'>
+        const emailPostButton = (!params.data.publish_date || params.data.email_sent === 'True') ? `
+          <a class='text-gray-300'>
             ${emailPostSvg}
           </a>` : `
           <a class='link' title='Email Subscribers' href="/manage/blog_post/${params.data.id}/email_subscribers" onclick="return confirm('Are you sure you want to email subscribers about this post?')">
@@ -68,9 +69,9 @@
         return `
         <div class='flex items-center justify-center gap-x-2 h-full'>
           ${editPostButton}
-          ${deletePostButton}
           ${publishPostButton}
           ${emailPostButton}
+          ${deletePostButton}
         </div>
         `;
     };
