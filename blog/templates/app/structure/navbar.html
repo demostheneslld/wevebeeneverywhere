@@ -23,10 +23,10 @@
         </div>
     </div>
     <!-- Small Screen Navigation -->
-    <div class='md:hidden border-t border-b border-gray-200 p-2'>
-        <div class='flex md:hidden justify-center gap-x-2'>{% include 'app/structure/navlinks.html' %}</div>
+    <div class='md:hidden border-t border-b border-gray-200 p-1'>
+        <div class='flex md:hidden justify-center text-sm gap-x-1'>{% include 'app/structure/navlinks.html' %}</div>
         {% if user.is_authenticated %}
-            <div class='flex md:hidden justify-center gap-x-2 mt-2'>{% include 'app/structure/auth-navlinks.html' %}</div>
+            <div class='flex md:hidden justify-center text-sm gap-x-1 mt-1'>{% include 'app/structure/auth-navlinks.html' %}</div>
         {% endif %}
     </div>
 </div>

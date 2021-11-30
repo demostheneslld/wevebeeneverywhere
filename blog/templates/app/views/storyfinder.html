@@ -37,12 +37,12 @@
     };
 
     const columnDefs = [
-        { field: "event_date", headerName: 'Event Date', width: dateWidth },
-        { field: "publish_date", headerName: 'Published', width: dateWidth },
         { field: "title", headerName: 'Title', cellRenderer: titleRenderer, flex: 1, minWidth: mdTextWidth},
         { field: "location_name", headerName: 'Location', width: mdTextWidth },
         { field: "score", headerName: 'Score', width: smTextWidth, valueFormatter: params => params.data.score_display },
         { field: "author", headerName: 'Author', width: smTextWidth },
+        { field: "event_date", headerName: 'Event Date', width: dateWidth },
+        { field: "publish_date", headerName: 'Published', width: dateWidth, sort: 'desc' },
         { field: "like_count", headerName: 'Cheers', width: minWidth },
         { field: "comment_count", headerName: 'Comments', width: minWidth },
     ];

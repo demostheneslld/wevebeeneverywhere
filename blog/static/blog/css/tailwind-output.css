@@ -28828,10 +28828,16 @@ a.link:hover {
   justify-content: center;
   text-align: center;
   border-radius: 0.25rem;
-  padding-left: 1rem;
-  padding-right: 1rem;
-  padding-top: 1rem;
-  padding-bottom: 1rem;
+  padding: 0.5rem;
+}
+
+@media (min-width: 768px) {
+  .btn {
+    padding: 1rem;
+  }
+}
+
+.btn {
   min-width: 5em;
 }
 
@@ -28841,10 +28847,16 @@ a.link:hover {
   justify-content: center;
   text-align: center;
   border-radius: 0.25rem;
-  padding-left: 1rem;
-  padding-right: 1rem;
-  padding-top: 1rem;
-  padding-bottom: 1rem;
+  padding: 0.5rem;
+}
+
+@media (min-width: 768px) {
+  .btn-short {
+    padding: 1rem;
+  }
+}
+
+.btn-short {
   min-width: 5em;
   padding-left: 1rem;
   padding-right: 1rem;

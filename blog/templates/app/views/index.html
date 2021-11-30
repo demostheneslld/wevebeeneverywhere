@@ -7,7 +7,7 @@
         <div>
             <h1>Explore everywhere with us</h1>
             <p>Join us, Nathan and Molly, as we travel the world. <b>{{ story_count }} destinations explored, and counting!</b></p>
-            <div class='flex gap-x-2 mt-4'>
+            <div class='flex flex-col gap-2 mt-4'>
                 <a class="btn-short btn-accent-dark" href="/stories">Click here to read our recent stories</a>
                 {% if user.profile.is_subscribed_to_emails %}
                   <button class="btn-short btn-good-dark">Subscribed to Emails!</button>
@@ -16,7 +16,7 @@
                 {% endif %}
             </div>
         </div>
-        <img style="width:170px; margin-top:30px;" src="{% static 'app/images/WBE.svg' %}" alt="Passport Stamp"/>
+        <img class='hidden md:block' style="width:170px; margin-top:30px;" src="{% static 'app/images/WBE.svg' %}" alt="Passport Stamp"/>
     </div>
     <img style="width:100%;" src="http://i.imgur.com/X2Bnl2x.png" alt="Polaroids and beer"/>
 </div>
