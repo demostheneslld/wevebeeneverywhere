@@ -42,7 +42,6 @@ class BlogPost(models.Model):
                      ('5', 'Great!'), ('6', 'AMAZING'), ('7', 'All Time Favorite')]
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     event_date = models.DateField(default=timezone.now)
-    is_published = models.BooleanField(default=False)
     publish_date = models.DateTimeField(default=None, blank=True, null=True)
     participants = models.CharField(max_length=400, blank=True, null=True)
     loc_name = models.CharField(max_length=100, default='Name, CityOrState')
@@ -57,12 +56,10 @@ class BlogPost(models.Model):
         max_length=15, choices=SCORE_CHOICES, default=4, null=True)
 
     def publish(self):
-        self.is_published = True
         self.publish_date = timezone.now()
         self.save()
 
     def unpublish(self):
-        self.is_published = False
         self.publish_date = None
         self.save()
 
