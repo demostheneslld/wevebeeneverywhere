@@ -10,15 +10,23 @@ WORKDIR /wbe
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 
+# install linux dependencies
+RUN apk update \
+    && apk add --no-cache gcc musl-dev libffi-dev zlib-dev jpeg-dev curl bash \
+    && touch ~/.bashrc
+
+# install node dependencies
+RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh | bash \
+  && . /root/.nvm/nvm.sh \
+  && nvm install 16
+
+# install python dependencies
+COPY requirements.txt .
+RUN pip install --upgrade pip \
+    && pip install -r requirements.txt
+
 # copy project
 COPY . .
-
-# install dependencies in new virtual env
-RUN python -m venv ./env \
-    chmod +x ./env/bin/activate \
-    ./env/bin/activate \
-    pip install --upgrade pip && \
-    pip install -r requirements.txt
 
 EXPOSE 8000
 

@@ -1,0 +1,5 @@
+.env
+_env
+__pycache__
+.vscode
+_jstoolchain/node_modules
