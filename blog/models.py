@@ -10,6 +10,8 @@ from django.utils import timezone
 # USER RELATED
 
 from django.contrib.auth.models import User
+
+from blog.email_helper import send_email
 User._meta.get_field('email')._unique = True
 
 
@@ -79,7 +81,28 @@ class BlogPost(models.Model):
         self.save()
 
     def send_email(self):
-        print('Not yet implemented...')
+        subscribed_users = Profile.objects.filter(is_subscribed_to_emails=True)
+        subject = f'''New Post: {self.title}!'''
+        body = f'''
+<p>We have a new story!<br/>
+Check it out :)</p>
+<p>
+  <b>{self.title}</b><br/>
+  <i>{self.subtitle}</i><br/>
+  <a href='https://wevebeeneverywhere.com/stories?id={self.id}'>Click here to read the story!</a>
+</p>
+<p>Thanks for reading,<br/>
+Nathan and Molly</p>
+<p>Want to change how you receive these emails?<br/>
+You can <a href='https://wevebeeneverywhere.com/accounts/profile'>update your preferences</a> or <a href='https://wevebeeneverywhere.com/accounts/unsubscribe'>unsubscribe from this list</a>.</p>
+'''
+        for subscribed_user in subscribed_users:
+            recipient = subscribed_user.user.email
+            print('Sending email to ' + recipient)
+            send_email(recipient, subject, body)
+        self.email_sent = True
+        self.save()
+        return len(subscribed_users)
 
     def comment_count(self):
         obj_pk = self.id

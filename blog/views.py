@@ -39,18 +39,6 @@ LOWER_BLOG_POST_FORM_FIELDS = [
 
 # HELPER FUNCTIONS
 
-
-def send_email(recipient, subject, body):
-    from django.core.mail import EmailMessage
-    send_email = EmailMessage(
-        subject=subject,
-        body=body,
-        from_email='no-reply@wevebeeneverywhere.com',
-        to=[recipient],
-    )
-    send_email.send(fail_silently=False)
-
-
 def getposts(request, topx=None, sort='-publish_date', post_id='all', author='all', published_only=True):
     posts = BlogPost.objects.all().order_by(sort).defer('content')
 
@@ -344,8 +332,8 @@ def manage_blog_post_email_subscribers(request, pk):
     assert isinstance(request, HttpRequest)
     post = get_object_or_404(BlogPost, pk=pk)
     if request.user == post.author:
-        post.send_email()
-        messages.warning(request, "Emailing Subscribers is not yet enabled")
+        emails_sent = post.send_email()
+        messages.success(request, "Emailed " + str(emails_sent) + " subscriber(s)")
     return redirect('manage_blog_post_list')
 
 # Publish Post

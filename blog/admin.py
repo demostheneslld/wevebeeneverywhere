@@ -14,6 +14,6 @@ class post_interactionsadmin(admin.ModelAdmin):
 admin.site.register(PostInteraction, post_interactionsadmin)
 
 class Profileadmin(admin.ModelAdmin):
-    list_display = (['user'])
+    list_display = (['user', 'is_subscribed_to_emails'])
 admin.site.register(Profile, Profileadmin)
 
