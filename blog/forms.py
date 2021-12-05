@@ -38,8 +38,9 @@ class SubscribeForm(forms.ModelForm):
         user = super(SubscribeForm, self).save(commit=False)
         user.username = self.cleaned_data['email']
         user.email = self.cleaned_data['email']
-        user.is_subscribed_to_emails = True
         if commit:
+            user.save()
+            user.profile.is_subscribed_to_emails = True
             user.save()
         return user
 
