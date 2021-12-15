@@ -101,10 +101,23 @@ MESSAGE_TAGS = {
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+#     }
+# }
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': environment.DB_ENGINE,
+        'NAME': environment.DB_NAME,
+        'HOST': environment.DB_HOST,
+        'USER': environment.DB_USER,
+        'PASSWORD': environment.DB_PASSWORD,
+        'OPTIONS': {
+          'DRIVER': environment.DB_DRIVER,
+        }
     }
 }
 
