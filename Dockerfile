@@ -12,28 +12,19 @@ ENV PYTHONUNBUFFERED 1
 
 # install linux dependencies
 RUN apk update \
-    && apk add --no-cache gcc musl-dev libffi-dev zlib-dev jpeg-dev curl bash unixodbc-dev \
-    && touch ~/.bashrc
-
-
-# sudo su
-# curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add -
-
-# #Download appropriate package for the OS version
-# #Choose only ONE of the following, corresponding to your OS version
-
-# #Ubuntu 20.04
-# curl https://packages.microsoft.com/config/ubuntu/20.04/prod.list > /etc/apt/sources.list.d/mssql-release.list
-
-# exit
-# sudo apt-get update
-# sudo ACCEPT_EULA=Y apt-get install -y msodbcsql17
-# # optional: for bcp and sqlcmd
-# sudo ACCEPT_EULA=Y apt-get install -y mssql-tools
-# echo 'export PATH="$PATH:/opt/mssql-tools/bin"' >> ~/.bashrc
-# source ~/.bashrc
-# # optional: for unixODBC development headers
-# sudo apt-get install -y unixodbc-dev
+    && apk add --no-cache gcc musl-dev libffi-dev zlib-dev jpeg-dev curl bash g++ unixodbc-dev gnupg \
+    && touch ~/.bashrc \
+    # These are all getting the mssql driver
+    # https://docs.microsoft.com/en-us/sql/connect/odbc/linux-mac/installing-the-microsoft-odbc-driver-for-sql-server?view=sql-server-ver15
+    && curl -O https://download.microsoft.com/download/e/4/e/e4e67866-dffd-428c-aac7-8d28ddafb39b/msodbcsql17_17.8.1.1-1_amd64.apk \
+    && curl -O https://download.microsoft.com/download/e/4/e/e4e67866-dffd-428c-aac7-8d28ddafb39b/mssql-tools_17.8.1.1-1_amd64.apk \
+    && curl -O https://download.microsoft.com/download/e/4/e/e4e67866-dffd-428c-aac7-8d28ddafb39b/msodbcsql17_17.8.1.1-1_amd64.sig \
+    && curl -O https://download.microsoft.com/download/e/4/e/e4e67866-dffd-428c-aac7-8d28ddafb39b/mssql-tools_17.8.1.1-1_amd64.sig \
+    && curl https://packages.microsoft.com/keys/microsoft.asc  | gpg --import - \
+    # && gpg --verify msodbcsql17_17.8.1.1-1_amd64.sig msodbcsql17_17.8.1.1-1_amd64.apk \
+    # && gpg --verify mssql-tools_17.8.1.1-1_amd64.sig mssql-tools_17.8.1.1-1_amd64.apk \
+    && apk add --allow-untrusted msodbcsql17_17.8.1.1-1_amd64.apk \
+    && apk add --allow-untrusted mssql-tools_17.8.1.1-1_amd64.apk
 
 # install node dependencies
 RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh | bash \
