@@ -2,8 +2,9 @@
     "python.pythonPath": "C:\\Users\\natha\\AppData\\Local\\Programs\\Python\\Python38-32\\python.exe",
     "python.venvPath": "env\\Scripts\\python.exe",
     "python.linting.pylintArgs": [
-        "--load-plugins=pylint_django"
+        "--load-plugins=pylint_django",
     ],
+    "python.formatting.autopep8Args": ["--indent-size=2"],
     "appService.defaultWebAppToDeploy": "/subscriptions/ddc2e845-9608-4b71-98e6-afbca62c6134/resourceGroups/public_sites/providers/Microsoft.Web/sites/wevebeeneverywhere",
     "appService.deploySubpath": ".",
     "python.linting.pylintEnabled": true

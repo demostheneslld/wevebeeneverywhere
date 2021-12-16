@@ -1,80 +1,78 @@
-{% extends "app/structure/layout.html" %}
+{% extends "app/structure/layout.html" %} {% block content %}
+<style>
+  #pagecontent {
+    min-width: 100%;
+    padding: 0px;
+  }
+</style>
+<div id="map" style="position: fixed; top: 0; left: 0; height: 90vh"></div>
+<script>
 
-{% block content %}
-    <style>
-        #pagecontent {
-            min-width: 100%;
-            padding: 0px;
-        }
-    </style>
-    <div id="map" style="position:fixed; top: 0; left:0; height:90vh;"></div>
-    <script>
+  let markerZIndex = 0;
 
-    function pinSymbol(color) {
+  function pinSymbol(color) {
     return {
-        path: 'M 0,0 C -2,-20 -10,-22 -10,-30 A 10,10 0 1,1 10,-30 C 10,-22 2,-20 0,0 z M -2,-30 a 2,2 0 1,1 4,0 2,2 0 1,1 -4,0',
-        fillColor: color,
-        fillOpacity: .75,
-        strokeColor: 'gainsboro',
-        strokeWeight: 1,
-        scale: 1.2,
-   };
-}
+      path: 'M 0,0 C -2,-20 -10,-22 -10,-30 A 10,10 0 1,1 10,-30 C 10,-22 2,-20 0,0 z M -2,-30 a 2,2 0 1,1 4,0 2,2 0 1,1 -4,0',
+      fillColor: color,
+      fillOpacity: .75,
+      strokeColor: 'gainsboro',
+      strokeWeight: 1,
+      scale: 1.2,
+    };
+  }
 
-        function initMap() {
-            var center = {lat: 20, lng: -55};
-            var map = new google.maps.Map(document.getElementById('map'), {
-              zoom: 2,
-              center: center,
-              gestureHandling: 'greedy',
-            });
-            
-            i = 0;
-            function addmarker(color, lat, lng, participants, content) {
-                i += 1;
-                var infowindow = new google.maps.InfoWindow({
-                    content: content
-                });
-            
-                var marker = new google.maps.Marker({
-                    position: { lat: lat, lng: lng },
-                    map: map,
-                    icon: pinSymbol(color),
-                    title: 'click for more!',
-                    zIndex: i
-                });
+  function addmarker(map, color, lat, lng, participants, content) {
+    console.log(`Adding Marker: ${color}, ${lat}, ${lng}, ${participants}, ${content}`);
+    markerZIndex++;
+    var infowindow = new google.maps.InfoWindow({
+        content: content
+    });
 
-                marker.addListener('click', function() {
-                    infowindow.open(map, marker);
-                });
-            }
+    var marker = new google.maps.Marker({
+        position: { lat: parseFloat(lat), lng: parseFloat(lng) },
+        map: map,
+        icon: pinSymbol(color),
+        title: 'click for more!',
+        zIndex: markerZIndex
+    });
 
-            {% for post in posts %}
-                addmarker(
-                    '{{ post.author.profile.map_icon_color }}', 
-                    {{ post.lat }}, 
-                    {{ post.lng }}, 
-                    '{{ post.participants }}', 
-                    `
-                        <h3>{{ post.title }}</h3>
-                        <h4>{{ post.subtitle }}</h4>
-                        <p>Written by <span style="font-weight:bold;color:{{ post.author.profile.map_icon_color }};">
-                            {{post.author.first_name}} {{post.author.last_name}}
-                        </span></p>
-                        <p>{{post.participants}} traveling to {{post.loc_name}} on {{post.event_date}}
-                        <p class='mt-2'><a class='link' href="/stories?id={{ post.id }}">Read the story!</a></p>
-                    `
-                    );
-            {% endfor %}
-        
-        }
-    </script>
-    <script src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js">
-    </script>
-    <script async defer
-        src="https://maps.googleapis.com/maps/api/js?key={{google_maps_api_key}}&callback=initMap">
-    </script>
-        
-    
+    marker.addListener('click', function() {
+        infowindow.open(map, marker);
+    });
+  }
+
+  function initMap() {
+    const center = {lat: 20, lng: -55};
+    const map = new google.maps.Map(document.getElementById('map'), {
+      zoom: 2,
+      center: center,
+      gestureHandling: 'greedy',
+    });
+    {% for post in posts %}
+      addmarker(
+        map,
+        '{{ post.author.profile.map_icon_color }}',
+        {{ post.lat }},
+        {{ post.lng }},
+        '{{ post.participants }}',
+        `
+            <h3>{{ post.title }}</h3>
+            <h4>{{ post.subtitle }}</h4>
+            <p>Written by <span style="font-weight:bold;color:{{ post.author.profile.map_icon_color }};">
+                {{post.author.first_name}} {{post.author.last_name}}
+            </span></p>
+            <p>{{post.participants}} traveling to {{post.loc_name}} on {{post.event_date}}
+            <p class='mt-2'><a class='link' href="/stories?id={{ post.id }}">Read the story!</a></p>
+        `
+      );
+    {% endfor %}
+  }
+</script>
+<script src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js"></script>
+<script
+  async
+  defer
+  src="https://maps.googleapis.com/maps/api/js?key={{google_maps_api_key}}&callback=initMap"
+></script>
 
 {% endblock %}
