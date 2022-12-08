@@ -3,7 +3,7 @@ astroid==2.9.0
 autopep8==1.6.0
 azure-core==1.20.1
 azure-storage-blob==12.9.0
-certifi==2021.10.8
+certifi==2022.12.7
 cffi==1.15.0
 charset-normalizer==2.0.8
 cryptography==36.0.0
