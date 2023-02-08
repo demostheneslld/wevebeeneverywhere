@@ -6,7 +6,7 @@ azure-storage-blob==12.9.0
 certifi==2021.10.8
 cffi==1.15.0
 charset-normalizer==2.0.8
-cryptography==36.0.0
+cryptography==39.0.1
 Django==3.2.9
 django-ckeditor==6.2.0
 django-js-asset==1.2.2
